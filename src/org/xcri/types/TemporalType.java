@@ -21,9 +21,11 @@ package org.xcri.types;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -53,7 +55,9 @@ public class TemporalType  extends XcriElement {
 	@Override
 	public Element toXml() {
 		Element element = super.toXml();
-		if (this.getDtf() != null) element.setAttribute("dtf", this.getDtf().toString());
+		Calendar dtf = Calendar.getInstance();
+		dtf.setTime(this.getDtf());
+		if (this.getDtf() != null) element.setAttribute("dtf", DatatypeConverter.printDateTime(dtf));
 		return element;
 	}
 
