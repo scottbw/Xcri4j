@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.jdom.Element;
 import org.xcri.Namespaces;
 import org.xcri.common.*;
+import org.xcri.exceptions.InvalidElementException;
 
 public abstract class CommonType extends XcriElement {
 	
@@ -50,7 +51,7 @@ public abstract class CommonType extends XcriElement {
 	 * @see org.xcri.types.XcriElement#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		
 		// Process child elements
@@ -58,34 +59,93 @@ public abstract class CommonType extends XcriElement {
 		ArrayList<Contributor> contributors = new ArrayList<Contributor>();
 		for (Object obj: element.getChildren("contributor", Namespaces.DC_NAMESPACE_NS)){
 			Contributor contributor = new Contributor();
-			contributor.fromXml((Element)obj);
-			contributors.add(contributor);
+			try {
+				contributor.fromXml((Element)obj);
+				contributors.add(contributor);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setContributors(contributors.toArray(new Contributor[contributors.size()]));
 		
 		ArrayList<Description> descriptions = new ArrayList<Description>();
 		for (Object obj: element.getChildren("description", Namespaces.DC_NAMESPACE_NS)){
 			Description description = new Description();
-			description.fromXml((Element)obj);
-			descriptions.add(description);
+			try {
+				description.fromXml((Element)obj);
+				descriptions.add(description);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setDescriptions(descriptions.toArray(new Description[descriptions.size()]));
 		
 		ArrayList<Identifier> identifiers = new ArrayList<Identifier>();
 		for (Object obj: element.getChildren("identifier", Namespaces.DC_NAMESPACE_NS)){
 			Identifier identifier = new Identifier();
-			identifier.fromXml((Element)obj);
-			identifiers.add(identifier);
+			try {
+				identifier.fromXml((Element)obj);
+				identifiers.add(identifier);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setIdentifiers(identifiers.toArray(new Identifier[identifiers.size()]));
 		
 		ArrayList<Title> titles = new ArrayList<Title>();
 		for (Object obj: element.getChildren("title", Namespaces.DC_NAMESPACE_NS)){
 			Title title = new Title();
-			title.fromXml((Element)obj);
-			titles.add(title);
+			try {
+				title.fromXml((Element)obj);
+				titles.add(title);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setTitles(titles.toArray(new Title[titles.size()]));
+		
+		ArrayList<Subject> subjects = new ArrayList<Subject>();
+		for (Object obj: element.getChildren("subject", Namespaces.DC_NAMESPACE_NS)){
+			Subject subject = new Subject();
+			try {
+				subject.fromXml((Element)obj);
+				subjects.add(subject);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.setSubjects(subjects.toArray(new Subject[subjects.size()]));
+		
+		ArrayList<Image> images = new ArrayList<Image>();
+		for (Object obj: element.getChildren("image", Namespaces.DC_NAMESPACE_NS)){
+			Image image = new Image();
+			try {
+				image.fromXml((Element)obj);
+				images.add(image);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.setImages(images.toArray(new Image[images.size()]));
+		
+		ArrayList<Type> types = new ArrayList<Type>();
+		for (Object obj: element.getChildren("type", Namespaces.DC_NAMESPACE_NS)){
+			Type type = new Type();
+			try {
+				type.fromXml((Element)obj);
+				types.add(type);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.setTypes(types.toArray(new Type[types.size()]));
 		
 	}
 	

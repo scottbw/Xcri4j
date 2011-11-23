@@ -29,6 +29,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonType;
 
 public class Catalog extends CommonType{
@@ -36,7 +37,7 @@ public class Catalog extends CommonType{
 	private Date generated;
 	private Provider[] providers;
 	
-	public void fromXml(Document document){
+	public void fromXml(Document document) throws InvalidElementException{
 		this.fromXml(document.getRootElement());
 	}
 	
@@ -54,7 +55,7 @@ public class Catalog extends CommonType{
 	 * @see org.xcri.types.Common#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		
 		//

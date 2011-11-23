@@ -23,6 +23,7 @@ package org.xcri.common;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.XcriElement;
 
 public class Image extends XcriElement{
@@ -95,7 +96,7 @@ public class Image extends XcriElement{
 	 * @see org.xcri.types.XcriElement#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		this.setAlt(element.getAttributeValue("alt"));
 		this.setSrc(element.getAttributeValue("src"));

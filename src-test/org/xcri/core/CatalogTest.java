@@ -29,11 +29,12 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Test;
+import org.xcri.exceptions.InvalidElementException;
 
 public class CatalogTest {
 
 	@Test
-	public void parse() throws IOException, JDOMException{
+	public void parse() throws IOException, JDOMException, InvalidElementException{
 		
 		Catalog catalog = new Catalog();
 		SAXBuilder builder = new SAXBuilder();

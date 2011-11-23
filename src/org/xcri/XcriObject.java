@@ -21,10 +21,11 @@
 package org.xcri;
 
 import org.jdom.Element;
+import org.xcri.exceptions.InvalidElementException;
 
 public interface XcriObject {
 	
-	public void fromXml(Element element);
+	public void fromXml(Element element) throws InvalidElementException;
 
 	public Element toXml();
 	

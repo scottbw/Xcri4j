@@ -24,6 +24,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.XcriObject;
+import org.xcri.exceptions.InvalidElementException;
 
 public abstract class XcriElement implements XcriObject {
 
@@ -87,7 +88,7 @@ public abstract class XcriElement implements XcriObject {
 	 * @see org.xcri.XcriObject#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		this.setValue(element.getText());
 		this.setType(element.getAttributeValue("type", Namespaces.XSI_NAMESPACE_NS));
 	}

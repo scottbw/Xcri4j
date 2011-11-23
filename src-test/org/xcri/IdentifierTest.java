@@ -24,11 +24,12 @@ import static org.junit.Assert.assertEquals;
 import org.jdom.Element;
 import org.junit.Test;
 import org.xcri.common.Identifier;
+import org.xcri.exceptions.InvalidElementException;
 
 public class IdentifierTest {
 	
 	@Test
-	public void fromElement(){
+	public void fromElement() throws InvalidElementException{
 		Element element = new Element("identifier", Namespaces.XCRI_NAMESPACE);
 		element.setAttribute("type", "ukrlp:ukprn", Namespaces.XSI_NAMESPACE_NS);
 		element.setText("TEST1");

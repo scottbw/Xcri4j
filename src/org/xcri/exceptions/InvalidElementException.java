@@ -17,27 +17,17 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.xcri.types;
+package org.xcri.exceptions;
 
-import org.jdom.Element;
-import org.xcri.exceptions.InvalidElementException;
+public class InvalidElementException extends Exception {
 
-public class CommonDescriptiveType extends CommonType {
+	private static final long serialVersionUID = -8636758008734154082L;
 
-	/* (non-Javadoc)
-	 * @see org.xcri.types.CommonType#toXml()
+	/**
+	 * @param cause a description of the problem 
 	 */
-	@Override
-	public Element toXml() {
-		return super.toXml();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.xcri.types.CommonType#fromXml(org.jdom.Element)
-	 */
-	@Override
-	public void fromXml(Element element) throws InvalidElementException {
-		super.fromXml(element);
+	public InvalidElementException(String cause) {
+		super(cause);
 	}
 	
 	

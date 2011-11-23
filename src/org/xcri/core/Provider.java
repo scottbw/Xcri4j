@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.provider.Location;
 import org.xcri.types.CommonType;
 
@@ -59,7 +60,7 @@ public class Provider extends CommonType{
 	 * @see org.xcri.types.Common#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		
 		//
@@ -68,15 +69,25 @@ public class Provider extends CommonType{
 		ArrayList<Course> courses = new ArrayList<Course>();
 		for (Object obj : element.getChildren("course", Namespaces.XCRI_NAMESPACE_NS)){
 			Course course = new Course();
-			course.fromXml((Element)obj);
-			courses.add(course);
+			try {
+				course.fromXml((Element)obj);
+				courses.add(course);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setCourses(courses.toArray(new Course[courses.size()]));
 		
 		if(element.getChild("location") != null){
 			Location location = new Location();
-			location.fromXml(element.getChild("location"));
-			this.setLocation(location);
+			try {
+				location.fromXml(element.getChild("location"));
+				this.setLocation(location);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

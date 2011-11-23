@@ -20,6 +20,7 @@
 package org.xcri.types;
 
 import org.jdom.Element;
+import org.xcri.exceptions.InvalidElementException;
 
 public class DescriptiveTextType extends LocalizedType{
 	
@@ -43,7 +44,7 @@ public class DescriptiveTextType extends LocalizedType{
 	 * @see org.xcri.Localized#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		this.setHref(element.getAttributeValue("href"));
 	}

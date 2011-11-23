@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonDescriptiveType;
 
 public class Course extends CommonDescriptiveType{
@@ -58,7 +59,7 @@ public class Course extends CommonDescriptiveType{
 	 * @see org.xcri.types.CommonType#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		//
 		// Add children

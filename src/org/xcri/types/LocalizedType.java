@@ -23,6 +23,7 @@ package org.xcri.types;
 import org.jdom.Element;
 import org.xcri.Namespaces;
 import org.xcri.XcriObject;
+import org.xcri.exceptions.InvalidElementException;
 
 public abstract class LocalizedType extends XcriElement implements XcriObject {
 	
@@ -33,7 +34,7 @@ public abstract class LocalizedType extends XcriElement implements XcriObject {
 	 * @see org.xcri.XcriObject#fromXml(org.jdom.Element)
 	 */
 	@Override
-	public void fromXml(Element element) {
+	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		this.setContent(element.getText());
 		this.setLang(element.getAttributeValue("lang", Namespaces.XML_NAMESPACE_NS));
