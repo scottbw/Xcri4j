@@ -20,8 +20,13 @@
 
 package org.xcri.common;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.XcriElement;
 
 public class Url extends XcriElement{
@@ -41,5 +46,20 @@ public class Url extends XcriElement{
 	public String getName() {
 		return "url";
 	}
+
+	/* (non-Javadoc)
+	 * @see org.xcri.types.XcriElement#fromXml(org.jdom.Element)
+	 */
+	@Override
+	public void fromXml(Element element) throws InvalidElementException {
+		super.fromXml(element);
+		try {
+			this.setValue(new URL(this.getValue()).toString());
+		} catch (MalformedURLException e) {
+			throw new InvalidElementException("URL: Invalid url:"+this.getValue());
+		}
+	}
+	
+	
 
 }
