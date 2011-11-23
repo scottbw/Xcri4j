@@ -19,6 +19,26 @@
  */
 package org.xcri.types;
 
+import org.jdom.Element;
+
 public class CommonDescriptiveType extends CommonType {
+
+	/* (non-Javadoc)
+	 * @see org.xcri.types.CommonType#toXml()
+	 */
+	@Override
+	public Element toXml() {
+		return super.toXml();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xcri.types.CommonType#fromXml(org.jdom.Element)
+	 */
+	@Override
+	public void fromXml(Element element) {
+		super.fromXml(element);
+	}
+	
+	
 
 }

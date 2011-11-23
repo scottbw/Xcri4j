@@ -33,8 +33,6 @@ public class Provider extends CommonType{
 	private Course[] courses;
 	private Location location;
 	
-	
-	
 	/* (non-Javadoc)
 	 * @see org.xcri.types.Common#toXml()
 	 */
@@ -68,7 +66,7 @@ public class Provider extends CommonType{
 		// Add children
 		//
 		ArrayList<Course> courses = new ArrayList<Course>();
-		for (Object obj : element.getChildren("provider", Namespaces.XCRI_NAMESPACE_NS)){
+		for (Object obj : element.getChildren("course", Namespaces.XCRI_NAMESPACE_NS)){
 			Course course = new Course();
 			course.fromXml((Element)obj);
 			courses.add(course);

@@ -19,21 +19,39 @@
  */
 package org.xcri.core;
 
+import java.util.ArrayList;
+
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.types.CommonDescriptiveType;
-import org.xcri.types.XcriElement;
 
 public class Course extends CommonDescriptiveType{
+	
+	private Presentation[] presentations;
+
+	/**
+	 * @return the presentations
+	 */
+	public Presentation[] getPresentations() {
+		return presentations;
+	}
+
+	/**
+	 * @param presentations the presentations to set
+	 */
+	public void setPresentations(Presentation[] presentations) {
+		this.presentations = presentations;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.xcri.types.CommonType#toXml()
 	 */
 	@Override
 	public Element toXml() {
-		// TODO Auto-generated method stub
-		return super.toXml();
+		Element element = super.toXml();
+		if (this.getPresentations()!= null) for (Presentation presentation:this.getPresentations()) element.addContent(presentation.toXml());
+		return element;
 	}
 
 	/* (non-Javadoc)
@@ -41,8 +59,17 @@ public class Course extends CommonDescriptiveType{
 	 */
 	@Override
 	public void fromXml(Element element) {
-		// TODO Auto-generated method stub
 		super.fromXml(element);
+		//
+		// Add children
+		//
+		ArrayList<Presentation> presentations = new ArrayList<Presentation>();
+		for (Object obj : element.getChildren("presentation", Namespaces.XCRI_NAMESPACE_NS)){
+			Presentation presentation = new Presentation();
+			presentation.fromXml((Element)obj);
+			presentations.add(presentation);
+		}
+		this.setPresentations(presentations.toArray(new Presentation[presentations.size()]));
 	}
 
 	/* (non-Javadoc)

@@ -35,14 +35,14 @@ public abstract class CommonType extends XcriElement {
 	public Element toXml() {
 		
 		Element element = super.toXml();
-		if (this.getContributors() != null) for (Contributor c: this.getContributors()) element.setContent(c.toXml());
-		if (this.getDescriptions() != null) for (Description d: this.getDescriptions()) element.setContent(d.toXml());
-		if (this.getIdentifiers() != null) for (Identifier i: this.getIdentifiers()) element.setContent(i.toXml());
-		if (this.getTitles() != null) for (Title t: this.getTitles()) element.setContent(t.toXml());
-		if (this.getSubjects() != null) for (Subject s: this.getSubjects()) element.setContent(s.toXml());
-		if (this.getImages() != null) for (Image i: this.getImages()) element.setContent(i.toXml());
-		if (this.getTypes() != null) for (Type t: this.getTypes()) element.setContent(t.toXml());
-		if (this.getUrls() != null) for (Url u: this.getUrls()) element.setContent(u.toXml());
+		if (this.getContributors() != null) for (Contributor c: this.getContributors()) element.addContent(c.toXml());
+		if (this.getDescriptions() != null) for (Description d: this.getDescriptions()) element.addContent(d.toXml());
+		if (this.getIdentifiers() != null) for (Identifier i: this.getIdentifiers()) element.addContent(i.toXml());
+		if (this.getTitles() != null) for (Title t: this.getTitles()) element.addContent(t.toXml());
+		if (this.getSubjects() != null) for (Subject s: this.getSubjects()) element.addContent(s.toXml());
+		if (this.getImages() != null) for (Image i: this.getImages()) element.addContent(i.toXml());
+		if (this.getTypes() != null) for (Type t: this.getTypes()) element.addContent(t.toXml());
+		if (this.getUrls() != null) for (Url u: this.getUrls()) element.addContent(u.toXml());
 		return element;
 	}
 	
@@ -70,6 +70,22 @@ public abstract class CommonType extends XcriElement {
 			descriptions.add(description);
 		}
 		this.setDescriptions(descriptions.toArray(new Description[descriptions.size()]));
+		
+		ArrayList<Identifier> identifiers = new ArrayList<Identifier>();
+		for (Object obj: element.getChildren("identifier", Namespaces.DC_NAMESPACE_NS)){
+			Identifier identifier = new Identifier();
+			identifier.fromXml((Element)obj);
+			identifiers.add(identifier);
+		}
+		this.setIdentifiers(identifiers.toArray(new Identifier[identifiers.size()]));
+		
+		ArrayList<Title> titles = new ArrayList<Title>();
+		for (Object obj: element.getChildren("title", Namespaces.DC_NAMESPACE_NS)){
+			Title title = new Title();
+			title.fromXml((Element)obj);
+			titles.add(title);
+		}
+		this.setTitles(titles.toArray(new Title[titles.size()]));
 		
 	}
 	
