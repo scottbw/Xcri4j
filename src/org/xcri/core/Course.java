@@ -24,12 +24,14 @@ import java.util.ArrayList;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.course.Qualification;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonDescriptiveType;
 
 public class Course extends CommonDescriptiveType{
 	
 	private Presentation[] presentations;
+	private Qualification[] qualifications;
 
 	/**
 	 * @return the presentations
@@ -67,10 +69,32 @@ public class Course extends CommonDescriptiveType{
 		ArrayList<Presentation> presentations = new ArrayList<Presentation>();
 		for (Object obj : element.getChildren("presentation", Namespaces.XCRI_NAMESPACE_NS)){
 			Presentation presentation = new Presentation();
-			presentation.fromXml((Element)obj);
-			presentations.add(presentation);
+			try {
+				presentation.fromXml((Element)obj);
+				presentations.add(presentation);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		this.setPresentations(presentations.toArray(new Presentation[presentations.size()]));
+		
+		ArrayList<Qualification> qualifications = new ArrayList<Qualification>();
+		for (Object obj : element.getChildren("qualification", Namespaces.XCRI_NAMESPACE_NS)){
+			Qualification qualification = new Qualification();
+			try {
+				qualification.fromXml((Element)obj);
+				qualifications.add(qualification);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.setQualifications(qualifications.toArray(new Qualification[qualifications.size()]));
+		
+		
+
+		
 	}
 
 	/* (non-Javadoc)
@@ -87,6 +111,20 @@ public class Course extends CommonDescriptiveType{
 	@Override
 	public String getName() {
 		return "course";
+	}
+
+	/**
+	 * @return the qualifications
+	 */
+	public Qualification[] getQualifications() {
+		return qualifications;
+	}
+
+	/**
+	 * @param qualifications the qualifications to set
+	 */
+	public void setQualifications(Qualification[] qualifications) {
+		this.qualifications = qualifications;
 	}
 	
 	

@@ -122,7 +122,7 @@ public abstract class CommonType extends XcriElement {
 		this.setSubjects(subjects.toArray(new Subject[subjects.size()]));
 		
 		ArrayList<Image> images = new ArrayList<Image>();
-		for (Object obj: element.getChildren("image", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: element.getChildren("image", Namespaces.XCRI_NAMESPACE_NS)){
 			Image image = new Image();
 			try {
 				image.fromXml((Element)obj);
@@ -146,6 +146,19 @@ public abstract class CommonType extends XcriElement {
 			}
 		}
 		this.setTypes(types.toArray(new Type[types.size()]));
+		
+		ArrayList<Url> urls = new ArrayList<Url>();
+		for (Object obj: element.getChildren("url", Namespaces.MLO_NAMESPACE_NS)){
+			Url url = new Url();
+			try {
+				url.fromXml((Element)obj);
+				urls.add(url);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.setUrls(urls.toArray(new Url[urls.size()]));
 		
 	}
 	
