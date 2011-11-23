@@ -27,12 +27,14 @@ public class Namespaces {
 	public static final String XCRI_NAMESPACE = "http://xcri.org/profiles/1.2/catalog";
 	public static final String MLO_NAMESPACE = "http://purl.org/net/mlo";
 	public static final String DC_NAMESPACE = "http://purl.org/dc/elements/1.1/";
+	public static final String DCTerms_NAMESPACE = "http://purl.org/dc/terms/";
 	public static final String XSI_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
 	
 	
 	public static final Namespace XSI_NAMESPACE_NS = Namespace.getNamespace("xsi", XSI_NAMESPACE);
 	public static final Namespace DC_NAMESPACE_NS = Namespace.getNamespace("dc",DC_NAMESPACE);
 	public static final Namespace XML_NAMESPACE_NS = Namespace.XML_NAMESPACE;
-	public static final Namespace MLO_NAMESPACE_NS = Namespace.getNamespace(MLO_NAMESPACE);
-	public static final Namespace XCRI_NAMESPACE_NS = Namespace.getNamespace(XCRI_NAMESPACE);
+	public static final Namespace MLO_NAMESPACE_NS = Namespace.getNamespace("mlo",MLO_NAMESPACE);
+	public static final Namespace XCRI_NAMESPACE_NS = Namespace.getNamespace("xcri",XCRI_NAMESPACE);
+	public static final Namespace DCTerms_NAMESPACE_NS = Namespace.getNamespace("dcterms", DCTerms_NAMESPACE);
 }
