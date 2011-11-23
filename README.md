@@ -4,6 +4,8 @@ A Java library for parsing XCRI documents
 
 http://www.xcri.org/wiki/index.php/XCRI_CAP_1.2
 
+Note that this ISN'T FINISHED! Please fork it and add missing parts :-)
+
 ## Basic Usage
 
 To parse an XML document and create a new Catalog object:
