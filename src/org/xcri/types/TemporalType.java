@@ -17,75 +17,62 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.xcri.core;
+package org.xcri.types;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
-import org.xcri.presentation.Start;
-import org.xcri.types.CommonDescriptiveType;
 
-public class Presentation extends CommonDescriptiveType {
+public class TemporalType  extends XcriElement {
 	
-	private Start start;
+	private Date dtf;
+
+	/**
+	 * @return the dtf
+	 */
+	public Date getDtf() {
+		return dtf;
+	}
+
+	/**
+	 * @param dtf the dtf to set
+	 */
+	public void setDtf(Date dtf) {
+		this.dtf = dtf;
+	}
 
 	/* (non-Javadoc)
-	 * @see org.xcri.types.CommonType#toXml()
+	 * @see org.xcri.types.XcriElement#toXml()
 	 */
 	@Override
 	public Element toXml() {
 		Element element = super.toXml();
-		if (this.getStart() != null) element.addContent(this.getStart().toXml());
+		if (this.getDtf() != null) element.setAttribute("dtf", this.getDtf().toString());
 		return element;
 	}
 
 	/* (non-Javadoc)
-	 * @see org.xcri.types.CommonType#fromXml(org.jdom.Element)
+	 * @see org.xcri.types.XcriElement#fromXml(org.jdom.Element)
 	 */
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
-		if (element.getChild("start", Namespaces.MLO_NAMESPACE_NS)!=null){
-			Start start = new Start();
+		if (element.getAttribute("dtf") != null){
 			try {
-				start.fromXml(element.getChild("start", Namespaces.MLO_NAMESPACE_NS));
-				this.setStart(start);
-			} catch (InvalidElementException e) {
+				Date date = new Date();
+				date = DatatypeConverter.parseDateTime(element.getAttributeValue("dtf")).getTime();
+				this.setDtf(date);
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.xcri.types.XcriElement#getNamespace()
-	 */
-	@Override
-	public Namespace getNamespace() {
-		return Namespaces.XCRI_NAMESPACE_NS;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.xcri.types.XcriElement#getName()
-	 */
-	@Override
-	public String getName() {
-		return "presentation";
-	}
-
-	/**
-	 * @return the start
-	 */
-	public Start getStart() {
-		return start;
-	}
-
-	/**
-	 * @param start the start to set
-	 */
-	public void setStart(Start start) {
-		this.start = start;
 	}
 	
 	

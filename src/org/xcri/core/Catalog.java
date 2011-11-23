@@ -25,6 +25,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -48,6 +50,7 @@ public class Catalog extends CommonType{
 	public Element toXml() {
 		Element element = super.toXml();
 		if (this.getProviders() != null) for (Provider provider: this.getProviders()) element.addContent(provider.toXml());		
+		if (this.getGenerated() != null) element.setAttribute("generated", this.getGenerated().toString());
 		return element;
 	}
 
@@ -64,11 +67,11 @@ public class Catalog extends CommonType{
 		if (element.getAttribute("generated")!= null){
 			try {
 				Date date = new Date();
-				date = DateFormat.getDateTimeInstance().parse(element.getAttributeValue("generated"));
+				date = DatatypeConverter.parseDateTime(element.getAttributeValue("generated")).getTime();
 				this.setGenerated(date);
-			} catch (ParseException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				//e.printStackTrace();
+				e.printStackTrace();
 			}
 		} else {
 			this.setGenerated(new Date());
