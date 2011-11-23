@@ -23,12 +23,14 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.presentation.End;
 import org.xcri.presentation.Start;
 import org.xcri.types.CommonDescriptiveType;
 
 public class Presentation extends CommonDescriptiveType {
 	
 	private Start start;
+	private End end;
 
 	/* (non-Javadoc)
 	 * @see org.xcri.types.CommonType#toXml()
@@ -37,6 +39,7 @@ public class Presentation extends CommonDescriptiveType {
 	public Element toXml() {
 		Element element = super.toXml();
 		if (this.getStart() != null) element.addContent(this.getStart().toXml());
+		if (this.getEnd() != null) element.addContent(this.getEnd().toXml());
 		return element;
 	}
 
@@ -51,6 +54,16 @@ public class Presentation extends CommonDescriptiveType {
 			try {
 				start.fromXml(element.getChild("start", Namespaces.MLO_NAMESPACE_NS));
 				this.setStart(start);
+			} catch (InvalidElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (element.getChild("end", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			End end = new End();
+			try {
+				end.fromXml(element.getChild("end", Namespaces.XCRI_NAMESPACE_NS));
+				this.setEnd(end);
 			} catch (InvalidElementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -86,6 +99,20 @@ public class Presentation extends CommonDescriptiveType {
 	 */
 	public void setStart(Start start) {
 		this.start = start;
+	}
+
+	/**
+	 * @return the end
+	 */
+	public End getEnd() {
+		return end;
+	}
+
+	/**
+	 * @param end the end to set
+	 */
+	public void setEnd(End end) {
+		this.end = end;
 	}
 	
 	

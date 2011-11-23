@@ -49,6 +49,16 @@ public class Qualification extends CommonType {
 			educationLevel.setText(this.getEducationLevel());
 			element.addContent(educationLevel);
 		}
+		if(this.getAwardedBy()!=null){
+			Element awardedBy = new Element("awardedBy", Namespaces.XCRI_NAMESPACE_NS);
+			awardedBy.setText(this.getAwardedBy());
+			element.addContent(awardedBy);
+		}
+		if(this.getAccreditedBy()!=null){
+			Element accreditedBy = new Element("accreditedBy", Namespaces.XCRI_NAMESPACE_NS);
+			accreditedBy.setText(this.getAccreditedBy());
+			element.addContent(accreditedBy);
+		}
 		return element;
 	}
 
