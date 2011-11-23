@@ -54,6 +54,7 @@ public class Course extends CommonDescriptiveType{
 	public Element toXml() {
 		Element element = super.toXml();
 		if (this.getPresentations()!= null) for (Presentation presentation:this.getPresentations()) element.addContent(presentation.toXml());
+		if (this.getQualifications()!= null) for (Qualification qualification:this.getQualifications()) element.addContent(qualification.toXml());
 		return element;
 	}
 
@@ -80,7 +81,7 @@ public class Course extends CommonDescriptiveType{
 		this.setPresentations(presentations.toArray(new Presentation[presentations.size()]));
 		
 		ArrayList<Qualification> qualifications = new ArrayList<Qualification>();
-		for (Object obj : element.getChildren("qualification", Namespaces.XCRI_NAMESPACE_NS)){
+		for (Object obj : element.getChildren("qualification", Namespaces.MLO_NAMESPACE_NS)){
 			Qualification qualification = new Qualification();
 			try {
 				qualification.fromXml((Element)obj);
