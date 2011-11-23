@@ -188,9 +188,15 @@ public abstract class CommonType extends XcriElement {
 	 * @return the descriptions
 	 */
 	public Description[] getDescriptions() {
+		if (descriptions == null || descriptions.length == 0){
+			if (this.getParent() instanceof CommonType){
+				return ((CommonType)this.getParent()).getDescriptions();
+			}
+		} 
 		return descriptions;
 	}
 	/**
+	 * Inheritable
 	 * @param descriptions the descriptions to set
 	 */
 	public void setDescriptions(Description[] descriptions) {
@@ -221,9 +227,15 @@ public abstract class CommonType extends XcriElement {
 		this.titles = titles;
 	}
 	/**
+	 * Inheritable
 	 * @return the subjects
 	 */
 	public Subject[] getSubjects() {
+		if (subjects == null || subjects.length == 0){
+			if (this.getParent() instanceof CommonType){
+				return ((CommonType)this.getParent()).getSubjects();
+			}
+		} 
 		return subjects;
 	}
 	/**
@@ -233,9 +245,15 @@ public abstract class CommonType extends XcriElement {
 		this.subjects = subjects;
 	}
 	/**
+	 * Inheritable
 	 * @return the images
 	 */
 	public Image[] getImages() {
+		if (images == null || images.length == 0){
+			if (this.getParent() instanceof CommonType){
+				return ((CommonType)this.getParent()).getImages();
+			}
+		} 
 		return images;
 	}
 	/**

@@ -71,6 +71,7 @@ public class Provider extends CommonType{
 			Course course = new Course();
 			try {
 				course.fromXml((Element)obj);
+				course.setParent(this);
 				courses.add(course);
 			} catch (InvalidElementException e) {
 				// TODO Auto-generated catch block

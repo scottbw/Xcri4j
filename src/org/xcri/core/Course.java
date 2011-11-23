@@ -72,6 +72,7 @@ public class Course extends CommonDescriptiveType{
 			Presentation presentation = new Presentation();
 			try {
 				presentation.fromXml((Element)obj);
+				presentation.setParent(this);
 				presentations.add(presentation);
 			} catch (InvalidElementException e) {
 				// TODO Auto-generated catch block

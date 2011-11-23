@@ -32,6 +32,7 @@ public abstract class XcriElement implements XcriObject {
 	private Namespace namespace;
 	private String value;
 	private String type;
+	private XcriElement parent;
 
 	/**
 	 * @return the value
@@ -91,6 +92,20 @@ public abstract class XcriElement implements XcriObject {
 	public void fromXml(Element element) throws InvalidElementException {
 		this.setValue(element.getText());
 		this.setType(element.getAttributeValue("type", Namespaces.XSI_NAMESPACE_NS));
+	}
+
+	/**
+	 * @return the parent
+	 */
+	public XcriElement getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(XcriElement parent) {
+		this.parent = parent;
 	}
 	
 	

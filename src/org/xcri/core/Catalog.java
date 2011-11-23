@@ -84,6 +84,7 @@ public class Catalog extends CommonType{
 		for (Object obj : element.getChildren("provider", Namespaces.XCRI_NAMESPACE_NS)){
 			Provider provider = new Provider();
 			provider.fromXml((Element)obj);
+			provider.setParent(this);
 			providers.add(provider);
 		}
 		this.setProviders(providers.toArray(new Provider[providers.size()]));

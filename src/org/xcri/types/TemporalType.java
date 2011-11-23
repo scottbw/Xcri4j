@@ -67,14 +67,23 @@ public class TemporalType  extends XcriElement {
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
+		
+		/*
+		 * If a Temporal Element does not contain text content, an Aggregator MUST treat the element as in error and ignore the element.
+		 */
+		if (this.getValue() == null) throw new InvalidElementException(this.getName()+": temporal element has no text content");
+		
 		if (element.getAttribute("dtf") != null){
 			try {
 				Date date = new Date();
 				date = DatatypeConverter.parseDateTime(element.getAttributeValue("dtf")).getTime();
 				this.setDtf(date);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				/* 
+				 * If a Temporal Element has a @dtf attribute, and the value of the attribute does not contain a valid date or time according 
+				 * to [W3C-DTF], an Aggregator MUST treat the element as in error and ignore the element.
+				 */
+				throw new InvalidElementException(this.getName()+": temporal element has @dtf attribute with invalid W3C-DTF date");
 			}
 		}
 	}

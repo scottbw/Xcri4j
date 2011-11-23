@@ -28,5 +28,5 @@ public interface XcriObject {
 	public void fromXml(Element element) throws InvalidElementException;
 
 	public Element toXml();
-	
+
 }
