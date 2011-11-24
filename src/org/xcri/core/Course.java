@@ -19,17 +19,24 @@
  */
 package org.xcri.core;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.common.Identifier;
 import org.xcri.course.Qualification;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonDescriptiveType;
 
 public class Course extends CommonDescriptiveType{
-	
+
+	private Log log = LogFactory.getLog(Course.class);
+
 	private Presentation[] presentations;
 	private Qualification[] qualifications;
 
@@ -64,6 +71,37 @@ public class Course extends CommonDescriptiveType{
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
+
+		//
+		// Check identifiers
+		//
+		if (this.getIdentifiers() == null || this.getIdentifiers().length == 0){
+			log.warn("course: course does not contain any identifiers");
+		} else {
+			boolean hasUrl = false;
+			for (Identifier identifier: this.getIdentifiers()){
+				try {
+					new URL(identifier.getValue());
+					hasUrl = true;
+				} catch (MalformedURLException e) {
+					if (identifier.getType() == null){
+						log.warn("course: course contains a non-URI identifier with no type:"+identifier.getValue());							
+					}
+				}
+			}
+			if (!hasUrl){
+				log.warn("course: course does not contain a URI identifier");
+			}
+		}
+		
+		//
+		// Check titles
+		//
+		if (this.getTitles() == null || this.getTitles().length == 0){
+			log.warn("course: course does not contain a title");
+		}
+
+
 		//
 		// Add children
 		//
@@ -80,7 +118,7 @@ public class Course extends CommonDescriptiveType{
 			}
 		}
 		this.setPresentations(presentations.toArray(new Presentation[presentations.size()]));
-		
+
 		ArrayList<Qualification> qualifications = new ArrayList<Qualification>();
 		for (Object obj : element.getChildren("qualification", Namespaces.MLO_NAMESPACE_NS)){
 			Qualification qualification = new Qualification();
@@ -93,10 +131,10 @@ public class Course extends CommonDescriptiveType{
 			}
 		}
 		this.setQualifications(qualifications.toArray(new Qualification[qualifications.size()]));
-		
-		
 
-		
+
+
+
 	}
 
 	/* (non-Javadoc)
@@ -128,7 +166,7 @@ public class Course extends CommonDescriptiveType{
 	public void setQualifications(Qualification[] qualifications) {
 		this.qualifications = qualifications;
 	}
-	
-	
+
+
 
 }

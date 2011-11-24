@@ -19,7 +19,25 @@
  */
 package org.xcri.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
+
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.junit.Test;
+import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 
 public class CourseTest {
 	
@@ -32,8 +50,137 @@ public class CourseTest {
 	 * details.
 	 */
 	@Test
-	public void testUriIdentifier(){
-		
-	}
+	public void noIdentifier() throws JDOMException, IOException, InvalidElementException{
+        Logger logger = Logger.getLogger(Course.class.getName());
 
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\"><provider><course></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: course: course does not contain any identifiers"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }
+	}	
+	@Test
+	public void noUriIdentifier() throws JDOMException, IOException, InvalidElementException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\"><provider><course><dc:title>Course Test</dc:title><dc:identifier>test-no-urls</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: course: course does not contain a URI identifier"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }
+	}
+	@Test
+	public void noUriIdentifierNoType() throws JDOMException, IOException, InvalidElementException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\"><provider><course><dc:title>Course Test</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier>test-no-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: course: course contains a non-URI identifier with no type"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }
+	}
+	@Test
+	public void goodIdentifiers() throws JDOMException, IOException, InvalidElementException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><dc:title>Course Test</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.length() == 0);
+
+        } finally {
+            logger.removeHandler(handler);
+        }
+	}
+	
+	/**
+	 * Title: Producers SHOULD include at least one title element for each course.
+	 */
+	@Test
+	public void testTitle() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("course: course does not contain a title"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }		
+	}
 }
