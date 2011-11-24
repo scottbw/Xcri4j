@@ -130,6 +130,11 @@ public abstract class CommonType extends XcriElement {
 			Image image = new Image();
 			try {
 				image.fromXml((Element)obj);
+				
+				if (image.getAlt() == null||image.getAlt().length() == 0){
+					log.warn("image: image should have alternative text");
+				}
+				
 				images.add(image);
 			} catch (InvalidElementException e) {
 				// TODO Auto-generated catch block

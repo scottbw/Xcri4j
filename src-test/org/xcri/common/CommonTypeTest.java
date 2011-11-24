@@ -19,6 +19,29 @@
  */
 package org.xcri.common;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
+
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.junit.Test;
+import org.xcri.Namespaces;
+import org.xcri.core.Catalog;
+import org.xcri.core.Course;
+import org.xcri.core.Provider;
+import org.xcri.exceptions.InvalidElementException;
+import org.xcri.types.CommonType;
+
 public class CommonTypeTest {
 	
 	/**
@@ -117,4 +140,28 @@ public class CommonTypeTest {
 	 * Inheritance: This element and any refinements of it is inheritable. See the section 
 	 * on inheritance for more guidance.
 	 */
+	@Test
+	public void imageNoAlt() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(CommonType.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><image src=\"provider.png\"/></provider></catalog>"));
+    		catalog.fromXml(document);
+            handler.flush();
+            String logMsg = out.toString();
+            assertNotNull(logMsg);
+            System.out.println("LOGDEBUG"+logMsg);
+            assertTrue(logMsg.contains("image: image should have alternative text"));
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	
 }
