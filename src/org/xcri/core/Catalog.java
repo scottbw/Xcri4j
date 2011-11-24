@@ -27,6 +27,8 @@ import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
@@ -35,14 +37,16 @@ import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonType;
 
 public class Catalog extends CommonType{
-	
+
+	private Log log = LogFactory.getLog(Catalog.class);
+
 	private Date generated;
 	private Provider[] providers;
-	
+
 	public void fromXml(Document document) throws InvalidElementException{
 		this.fromXml(document.getRootElement());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.xcri.types.Common#toXml()
 	 */
@@ -60,7 +64,7 @@ public class Catalog extends CommonType{
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
-		
+
 		//
 		// Add generated
 		//
@@ -69,14 +73,23 @@ public class Catalog extends CommonType{
 				Date date = new Date();
 				date = DatatypeConverter.parseDateTime(element.getAttributeValue("generated")).getTime();
 				this.setGenerated(date);
+
+				//
+				// Time and Year?
+				//
+				if (!element.getAttributeValue("generated").contains("T") || element.getAttributeValue("generated").split("T")[1].length()!=9){
+					log.warn("catalog: @generated contains date but not time:"+element.getAttributeValue("generated"));
+				}
+
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+				log.error("catalog: @generated contains invalid date:"+element.getAttributeValue("generated"));
+				throw new InvalidElementException("catalog: @generated contains invalid date:"+element.getAttributeValue("generated"));
 			}
 		} else {
 			this.setGenerated(new Date());
 		}
-		
+
 		//
 		// Add children
 		//

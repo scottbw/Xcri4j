@@ -17,26 +17,23 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.xcri;
+package org.xcri.core;
 
-import static org.junit.Assert.assertEquals;
-
-import org.jdom.Element;
 import org.junit.Test;
-import org.xcri.common.Identifier;
-import org.xcri.exceptions.InvalidElementException;
 
-public class IdentifierTest {
+public class CourseTest {
 	
+	/**
+	 * Identifier: A Course SHOULD have a unique identifier 
+	 * formatted as a URI (e.g. "http://www.bolton.ac.uk/courses/1"). 
+	 * Additional identifiers in other formats may be used, 
+	 * but SHOULD be qualified using xsi:type to a specific identifier 
+	 * namespace. See the guidance on the identifier element for more 
+	 * details.
+	 */
 	@Test
-	public void fromElement() throws InvalidElementException{
-		Element element = new Element("identifier", Namespaces.XCRI_NAMESPACE);
-		element.setAttribute("type", "ukrlp:ukprn", Namespaces.XSI_NAMESPACE_NS);
-		element.setText("TEST1");
-		Identifier identifier = new Identifier();
-		identifier.fromXml(element);
-		assertEquals("TEST1", identifier.getValue());
-		assertEquals("ukrlp:ukprn", identifier.getType());
+	public void testUriIdentifier(){
+		
 	}
 
 }

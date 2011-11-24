@@ -22,12 +22,16 @@ package org.xcri.types;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.xcri.Namespaces;
 import org.xcri.common.*;
 import org.xcri.exceptions.InvalidElementException;
 
 public abstract class CommonType extends XcriElement {
+	
+	private Log log = LogFactory.getLog(CommonType.class);
 	
 	/* (non-Javadoc)
 	 * @see org.xcri.types.XcriElement#toXml()
@@ -154,8 +158,7 @@ public abstract class CommonType extends XcriElement {
 				url.fromXml((Element)obj);
 				urls.add(url);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 		}
 		this.setUrls(urls.toArray(new Url[urls.size()]));
