@@ -22,10 +22,12 @@ package org.xcri.core;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.common.Title;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.presentation.End;
 import org.xcri.presentation.Start;
 import org.xcri.types.CommonDescriptiveType;
+import org.xcri.types.CommonType;
 
 public class Presentation extends CommonDescriptiveType {
 	
@@ -113,6 +115,19 @@ public class Presentation extends CommonDescriptiveType {
 	 */
 	public void setEnd(End end) {
 		this.end = end;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xcri.types.CommonType#getTitles()
+	 */
+	@Override
+	public Title[] getTitles() {
+		if (titles == null || titles.length == 0){
+			if (this.getParent() instanceof CommonType){
+				return ((CommonType)this.getParent()).getTitles();
+			}
+		} 
+		return titles;
 	}
 	
 	

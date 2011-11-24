@@ -169,7 +169,7 @@ public abstract class CommonType extends XcriElement {
 	private Contributor[] contributors;
 	private Description[] descriptions;
 	private Identifier[] identifiers;
-	private Title[] titles;
+	protected Title[] titles;
 	private Subject[] subjects;
 	private Image[] images;
 	private Type[] types;
