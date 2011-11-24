@@ -21,20 +21,28 @@ package org.xcri.core;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
 
 public class ProviderTest {
-	
+
 	private static Catalog catalog;
-	
+
 	@BeforeClass
 	public static void setup() throws JDOMException, IOException, InvalidElementException{
 		catalog = new Catalog();
@@ -42,7 +50,7 @@ public class ProviderTest {
 		Document document = builder.build(new File("src-test/test.xml"));
 		catalog.fromXml(document);
 	}
-	
+
 	@Test
 	public void testProviderProperties(){
 		assertEquals(1, catalog.getProviders().length);
@@ -52,6 +60,117 @@ public class ProviderTest {
 		assertEquals("http://www.craighawker.co.uk/logo.gif", provider.getImages()[0].getSrc());
 		assertEquals("Example provider", provider.getTitles()[0].getValue());
 		assertEquals("http://www.craighawker.co.uk/", provider.getUrls()[0].getValue());
+	}
+
+	/**
+	 * TODO Identifiers: Producers SHOULD create Provider elements with 
+	 * a default unique identifier formatted as a URL 
+	 * (e.g. "http://www.bolton.ac.uk/"). Producers MAY include 
+	 * additional identifiers in other formats, but these SHOULD be 
+	 * qualified using xsi:type to a specific identifier namespace. 
+	 * An example would include the UK provider reference number (UKPRN) 
+	 * within the UKRLP:UKPRN namespace. See the identifier element 
+	 * definition for more details.
+	 */
+
+	/**
+	 * Title: Producers SHOULD include at least one title element for a 
+	 * provider, which SHOULD be the trading name of the organisation
+	 */
+	@Test
+	public void noTitle() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Provider.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><image src=\"provider.png\"/><dc:subject>lots of stuff</dc:subject><course><dc:subject>stuff</dc:subject><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("provider: provider has no title"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	
+	/** 
+	 * Type: Where a Producer uses the Type element for a provider, 
+	 * this SHOULD use a sector-specific controlled list of terms 
+	 * for this element. These SHOULD be qualified using xsi:type 
+	 * to a specific vocabulary namespace.
+	 */
+
+	/**
+	 * Url: Producers SHOULD include one Url element for each provider, 
+	 * which SHOULD include a URL for its homepage, or its applications 
+	 * microsite, in addition to its primary domain identifier (see above).
+	 */
+	@Test
+	public void testNoUrl() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Provider.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><image src=\"provider.png\"/><dc:subject>lots of stuff</dc:subject><course><dc:subject>stuff</dc:subject><mlo:level>3</mlo:level><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("provider: provider has no URL"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+
+	/**
+	 * Course: In almost all cases Producers SHOULD include at least one 
+	 * course for a provider. The capability for supporting zero courses 
+	 * is offered for cases where XCRI CAP is used to format course search 
+	 * results.
+	 */
+	@Test
+	public void noCourses() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Provider.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><mlo:url>http://test.com</mlo:url><dc:subject>lots of stuff</dc:subject></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("provider: provider contains no courses"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
 	}
 
 }

@@ -139,7 +139,7 @@ public class CourseTest {
         try {
         	Catalog catalog = new Catalog();
     		SAXBuilder builder = new SAXBuilder();
-    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><dc:title>Course Test</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><dc:title>Course Test</dc:title><dc:subject>stuff</dc:subject><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
     		catalog.fromXml(document);
 
 
@@ -177,10 +177,144 @@ public class CourseTest {
             String logMsg = out.toString();
 
             assertNotNull(logMsg);
-            assertTrue(logMsg.contains("course: course does not contain a title"));
+            assertTrue(logMsg.contains("course: course has no title"));
 
         } finally {
             logger.removeHandler(handler);
         }		
+	}
+	
+	/**
+	 * Subject: Producer SHOULD include at least one subject element for each course. 
+	 * See the guidance on the subject element for more information.
+	 */
+	@Test
+	public void testSubject() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("course: course does not contain a subject"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }		
+	}
+	@Test
+	public void testSubjectInherited() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><dc:subject>lots of stuff</dc:subject><course><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+    		
+    		assertEquals("lots of stuff", catalog.getProviders()[0].getSubjects()[0].getValue());
+    		assertEquals("lots of stuff", catalog.getProviders()[0].getCourses()[0].getSubjects()[0].getValue());
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("course: course does not contain a subject"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }		
+	}
+	@Test
+	public void testSubjectOK() throws InvalidElementException, JDOMException, IOException{
+
+		Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><dc:subject>lots of stuff</dc:subject><course><dc:subject>stuff</dc:subject><mlo:level>3</mlo:level><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+		catalog.fromXml(document);
+
+		assertEquals("lots of stuff", catalog.getProviders()[0].getSubjects()[0].getValue());
+		assertEquals("stuff", catalog.getProviders()[0].getCourses()[0].getSubjects()[0].getValue());
+
+	}
+	
+	/**
+	 * Level: This is included for compatibility with [EN 15982]. 
+	 * Producers SHOULD NOT use this element, and Aggregators SHOULD 
+	 * make use of the Qualification and Credit elements to assist 
+	 * users to discover courses by level.
+	 * @throws InvalidElementException 
+	 * @throws IOException 
+	 * @throws JDOMException 
+	 */
+	@Test
+	public void testLevels() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Course.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><dc:subject>lots of stuff</dc:subject><course><dc:subject>stuff</dc:subject><mlo:level>3</mlo:level><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("course: level is not recommended"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	
+	/**
+	 * Credit: Producers SHOULD use separate credit elements for 
+	 * describing the credits available under each scheme, for 
+	 * example CATS or ECTS.
+	 */
+	//
+	// TODO
+	//
+	
+	/**
+	 * Absence of Image: Where a course does not contain an image, 
+	 * but its containing provider does, an Aggregator MAY use the 
+	 * image of the provider when displaying the course.
+	 */
+	@Test
+	public void testInheritImages() throws InvalidElementException, JDOMException, IOException{
+
+		Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><image src=\"provider.png\"/><dc:subject>lots of stuff</dc:subject><course><dc:subject>stuff</dc:subject><mlo:level>3</mlo:level><dc:title>Test Title</dc:title><dc:identifier>http://test.org/testcourse/1</dc:identifier><dc:identifier xsi:type='test'>test-contains-type</dc:identifier></course></provider></catalog>"));
+		catalog.fromXml(document);
+
+		assertEquals("provider.png", catalog.getProviders()[0].getImages()[0].getSrc());
+		assertEquals("provider.png", catalog.getProviders()[0].getCourses()[0].getImages()[0].getSrc());
+
 	}
 }

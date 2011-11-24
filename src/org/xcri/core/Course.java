@@ -98,9 +98,26 @@ public class Course extends CommonDescriptiveType{
 		// Check titles
 		//
 		if (this.getTitles() == null || this.getTitles().length == 0){
-			log.warn("course: course does not contain a title");
+			log.warn("course: course has no title");
 		}
-
+		
+		//
+		// Check subjects
+		//
+		if (this.getSubjects() == null || this.getSubjects().length == 0){
+			log.warn("course: course does not contain a subject");
+		} else {
+			if (this.getParent()!= null && this.getSubjects() == ((Provider)this.getParent()).getSubjects()){
+				log.warn("course: course does not contain a subject; using inherited value from provider");				
+			}
+		}
+		
+		//
+		// Level
+		//
+		if (element.getChild("level", Namespaces.MLO_NAMESPACE_NS) != null){
+			log.warn("course: level is not recommended");
+		}
 
 		//
 		// Add children

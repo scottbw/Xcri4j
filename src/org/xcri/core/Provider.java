@@ -22,6 +22,8 @@ package org.xcri.core;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
@@ -30,6 +32,8 @@ import org.xcri.provider.Location;
 import org.xcri.types.CommonType;
 
 public class Provider extends CommonType{
+	
+	private Log log = LogFactory.getLog(Provider.class);
 	
 	private Course[] courses;
 	private Location location;
@@ -64,6 +68,24 @@ public class Provider extends CommonType{
 		super.fromXml(element);
 		
 		//
+		// Check URL
+		//
+		if (this.getUrls() == null || this.getUrls().length==0){
+			log.warn("provider: provider has no URL");
+		}
+		
+		//
+		// TODO Check types use xsi:type
+		//
+		
+		//
+		// Check titles
+		//
+		if (this.getTitles() == null || this.getTitles().length == 0){
+			log.warn("provider: provider has no title");
+		}
+	
+		//
 		// Add children
 		//
 		ArrayList<Course> courses = new ArrayList<Course>();
@@ -79,6 +101,7 @@ public class Provider extends CommonType{
 			}
 		}
 		this.setCourses(courses.toArray(new Course[courses.size()]));
+		if (courses.size()==0) log.warn("provider: provider contains no courses");
 		
 		if(element.getChild("location") != null){
 			Location location = new Location();
