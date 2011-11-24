@@ -17,31 +17,27 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.xcri.common;
 
-import org.jdom.Namespace;
+import static org.junit.Assert.assertEquals;
+
+import org.jdom.Element;
+import org.junit.Test;
 import org.xcri.Namespaces;
-import org.xcri.types.XcriElement;
+import org.xcri.common.Identifier;
+import org.xcri.exceptions.InvalidElementException;
 
-public class Title extends XcriElement {
-
-	/* (non-Javadoc)
-	 * @see org.xcri.XcriElement#getName()
-	 */
-	@Override
-	public String getName() {
-		return "title";
-	}
-
-	/* (non-Javadoc)
-	 * @see org.xcri.XcriElement#getNamespace()
-	 */
-	@Override
-	public Namespace getNamespace() {
-		return Namespaces.DC_NAMESPACE_NS;
-	}
+public class IdentifierTest {
 	
-	
+	@Test
+	public void fromElement() throws InvalidElementException{
+		Element element = new Element("identifier", Namespaces.XCRI_NAMESPACE);
+		element.setAttribute("type", "ukrlp:ukprn", Namespaces.XSI_NAMESPACE_NS);
+		element.setText("TEST1");
+		Identifier identifier = new Identifier();
+		identifier.fromXml(element);
+		assertEquals("TEST1", identifier.getValue());
+		assertEquals("ukrlp:ukprn", identifier.getType());
+	}
 
 }

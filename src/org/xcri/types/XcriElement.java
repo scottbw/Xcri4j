@@ -32,6 +32,7 @@ public abstract class XcriElement implements XcriObject {
 	private Namespace namespace;
 	private String value;
 	private String type;
+	private String lang;
 	private XcriElement parent;
 
 	/**
@@ -81,7 +82,8 @@ public abstract class XcriElement implements XcriObject {
 	public Element toXml() {
 		Element element = new Element(this.getName(), this.getNamespace());
 		if (this.getValue() != null) element.setText(getValue());
-		if (this.getType() != null) element.setAttribute("type", getType(), Namespaces.XSI_NAMESPACE_NS);;
+		if (this.getType() != null) element.setAttribute("type", getType(), Namespaces.XSI_NAMESPACE_NS);
+		if (this.getLang() != null) element.setAttribute("lang", this.getLang(), Namespaces.XML_NAMESPACE_NS);
 		return element;
  	}
 
@@ -92,6 +94,7 @@ public abstract class XcriElement implements XcriObject {
 	public void fromXml(Element element) throws InvalidElementException {
 		this.setValue(element.getText());
 		this.setType(element.getAttributeValue("type", Namespaces.XSI_NAMESPACE_NS));
+		this.setLang(element.getAttributeValue("lang", Namespaces.XML_NAMESPACE_NS));
 	}
 
 	/**
@@ -106,6 +109,20 @@ public abstract class XcriElement implements XcriObject {
 	 */
 	public void setParent(XcriElement parent) {
 		this.parent = parent;
+	}
+
+	/**
+	 * @return the lang
+	 */
+	public String getLang() {
+		return lang;
+	}
+
+	/**
+	 * @param lang the lang to set
+	 */
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 	
 	

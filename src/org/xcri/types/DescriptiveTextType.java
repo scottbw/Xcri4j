@@ -22,7 +22,7 @@ package org.xcri.types;
 import org.jdom.Element;
 import org.xcri.exceptions.InvalidElementException;
 
-public class DescriptiveTextType extends LocalizedType{
+public class DescriptiveTextType extends XcriElement{
 	
 	private String href;
 
