@@ -20,8 +20,136 @@
 
 package org.xcri.provider;
 
+import org.jdom.Namespace;
+import org.xcri.Namespaces;
 import org.xcri.types.XcriElement;
 
 public class Location extends XcriElement{
+	
+	private String street;
+	private String postalTown;
+	private String postCode;
+	private String[] address;
+	private String phone;
+	private String fax;
+	private String email;
+	private String url;
+	
+	
+	
+	
+	
+	/**
+	 * @return the street
+	 */
+	public String getStreet() {
+		return street;
+	}
+	/**
+	 * @param street the street to set
+	 */
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	/**
+	 * @return the postalTown
+	 */
+	public String getPostalTown() {
+		return postalTown;
+	}
+	/**
+	 * @param postalTown the postalTown to set
+	 */
+	public void setPostalTown(String postalTown) {
+		this.postalTown = postalTown;
+	}
+	/**
+	 * @return the postCode
+	 */
+	public String getPostCode() {
+		return postCode;
+	}
+	/**
+	 * @param postCode the postCode to set
+	 */
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+	/**
+	 * @return the address
+	 */
+	public String[] getAddress() {
+		return address;
+	}
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(String[] address) {
+		this.address = address;
+	}
+	/**
+	 * @return the phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
+	/**
+	 * @param phone the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	/**
+	 * @return the fax
+	 */
+	public String getFax() {
+		return fax;
+	}
+	/**
+	 * @param fax the fax to set
+	 */
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	/* (non-Javadoc)
+	 * @see org.xcri.types.XcriElement#getNamespace()
+	 */
+	@Override
+	public Namespace getNamespace() {
+		return Namespaces.XCRI_NAMESPACE_NS;
+	}
+	/* (non-Javadoc)
+	 * @see org.xcri.types.XcriElement#getName()
+	 */
+	@Override
+	public String getName() {
+		return  "location";
+	}
+	
+	
 
 }

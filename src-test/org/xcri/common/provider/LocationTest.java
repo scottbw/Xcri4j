@@ -22,6 +22,17 @@ package org.xcri.common.provider;
 public class LocationTest {
 	
 	/**
+	 * 
+	 * TODO Producers MUST NOT use a PO Box or other 'virtual' address in street, town or postcode.
+	 * 
+	 * TODO Producers MUST create <email> elements containing content that conforms to the "addr-spec" production in RFC2822
+	 * 
+	 * TODO Producers MUST create <url> elements containing a valid URL as defined by RFC1738
+	 * 
+	 * TODO This element MUST use the [EN 15982] namespace: http://purl.org/net/mlo
+	 */
+	
+	/**
 	 * TODO Refinements: Producers MAY refine the address element using 
 	 * other schemes to create specific address components. If using 
 	 * an alternative or additional encoding scheme, the scheme SHOULD 

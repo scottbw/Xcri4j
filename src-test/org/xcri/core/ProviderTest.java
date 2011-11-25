@@ -172,5 +172,9 @@ public class ProviderTest {
             logger.removeHandler(handler);
         }	
 	}
+	
+	/**
+	 * TODO multiple location elements
+	 */
 
 }

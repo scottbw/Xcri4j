@@ -96,8 +96,7 @@ public class Provider extends CommonType{
 				course.setParent(this);
 				courses.add(course);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("provider : skipping invalid <course> element : "+e.getMessage());
 			}
 		}
 		this.setCourses(courses.toArray(new Course[courses.size()]));
@@ -109,9 +108,12 @@ public class Provider extends CommonType{
 				location.fromXml(element.getChild("location"));
 				this.setLocation(location);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("provider : skipping invalid <location> element : "+e.getMessage());
 			}
+		}
+		
+		if(element.getChildren("location").size() > 1){
+			log.warn("provider : multiple <location> elements found; skipping all but first occurrence");
 		}
 	}
 
