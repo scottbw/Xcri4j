@@ -19,6 +19,8 @@
  */
 package org.xcri.core;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
@@ -30,6 +32,8 @@ import org.xcri.types.CommonDescriptiveType;
 import org.xcri.types.CommonType;
 
 public class Presentation extends CommonDescriptiveType {
+	
+	private Log log = LogFactory.getLog(Presentation.class);
 	
 	private Start start;
 	private End end;
@@ -57,8 +61,7 @@ public class Presentation extends CommonDescriptiveType {
 				start.fromXml(element.getChild("start", Namespaces.MLO_NAMESPACE_NS));
 				this.setStart(start);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("presentation : skipping invalid start element: "+e.getMessage());
 			}
 		}
 		if (element.getChild("end", Namespaces.XCRI_NAMESPACE_NS)!=null){
@@ -67,8 +70,7 @@ public class Presentation extends CommonDescriptiveType {
 				end.fromXml(element.getChild("end", Namespaces.XCRI_NAMESPACE_NS));
 				this.setEnd(end);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("presentation : skipping invalid end element: "+e.getMessage());
 			}
 		}
 	}

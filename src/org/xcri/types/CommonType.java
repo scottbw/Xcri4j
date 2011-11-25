@@ -82,8 +82,7 @@ public abstract class CommonType extends XcriElement {
 				}
 				
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid contributor element: "+e.getMessage());
 			}
 		}
 		this.setContributors(contributors.toArray(new Contributor[contributors.size()]));
@@ -95,8 +94,7 @@ public abstract class CommonType extends XcriElement {
 				description.fromXml((Element)obj);
 				descriptions.add(description);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid description element: "+e.getMessage());
 			}
 		}
 		this.setDescriptions(descriptions.toArray(new Description[descriptions.size()]));
@@ -108,8 +106,7 @@ public abstract class CommonType extends XcriElement {
 				identifier.fromXml((Element)obj);
 				identifiers.add(identifier);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid identifier element: "+e.getMessage());
 			}
 		}
 		this.setIdentifiers(identifiers.toArray(new Identifier[identifiers.size()]));
@@ -121,8 +118,7 @@ public abstract class CommonType extends XcriElement {
 				title.fromXml((Element)obj);
 				titles.add(title);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid title element: "+e.getMessage());
 			}
 		}
 		//
@@ -135,7 +131,6 @@ public abstract class CommonType extends XcriElement {
 				log.warn("title : there SHOULD NOT be more than one occurrence of title per language tag."); 
 			} else {
 				languages.add(title.getLang());
-				System.out.println(title.getLang());
 			}
 		}
 		this.setTitles(titles.toArray(new Title[titles.size()]));
@@ -147,8 +142,7 @@ public abstract class CommonType extends XcriElement {
 				subject.fromXml((Element)obj);
 				subjects.add(subject);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid subject element: "+e.getMessage());
 			}
 		}
 		this.setSubjects(subjects.toArray(new Subject[subjects.size()]));
@@ -175,8 +169,7 @@ public abstract class CommonType extends XcriElement {
 				}
 				images.add(image);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid image element: "+e.getMessage());
 			}
 		}
 		this.setImages(images.toArray(new Image[images.size()]));
@@ -188,8 +181,7 @@ public abstract class CommonType extends XcriElement {
 				type.fromXml((Element)obj);
 				types.add(type);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(this.getName()+" : skipping invalid type element: "+e.getMessage());
 			}
 		}
 		this.setTypes(types.toArray(new Type[types.size()]));

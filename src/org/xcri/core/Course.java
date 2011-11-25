@@ -126,8 +126,7 @@ public class Course extends CommonDescriptiveType{
 				presentation.setParent(this);
 				presentations.add(presentation);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("course : presentation invalid, skipping");
 			}
 		}
 		this.setPresentations(presentations.toArray(new Presentation[presentations.size()]));
@@ -139,8 +138,7 @@ public class Course extends CommonDescriptiveType{
 				qualification.fromXml((Element)obj);
 				qualifications.add(qualification);
 			} catch (InvalidElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("course : qualification invalid, skipping");
 			}
 		}
 		this.setQualifications(qualifications.toArray(new Qualification[qualifications.size()]));

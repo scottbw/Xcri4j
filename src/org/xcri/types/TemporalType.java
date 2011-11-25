@@ -19,16 +19,12 @@
  */
 package org.xcri.types;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.jdom.Element;
-import org.jdom.Namespace;
 import org.xcri.exceptions.InvalidElementException;
 
 public class TemporalType  extends XcriElement {
@@ -71,7 +67,7 @@ public class TemporalType  extends XcriElement {
 		/*
 		 * If a Temporal Element does not contain text content, an Aggregator MUST treat the element as in error and ignore the element.
 		 */
-		if (this.getValue() == null) throw new InvalidElementException(this.getName()+": temporal element has no text content");
+		if (this.getValue() == null || this.getValue().trim().length() == 0) throw new InvalidElementException(this.getName()+": temporal element has no text content");
 		
 		if (element.getAttribute("dtf") != null){
 			try {
