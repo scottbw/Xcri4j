@@ -19,36 +19,13 @@
  */
 package org.xcri.core.course;
 
-public class QualificationTest {
+public class CreditTest {
 	
 	/**
-	 * TODO identifier: It is possible that Awarding Bodies will 
-	 * have permanent URLs for the qualifications they award; 
-	 * these would be preferable identifiers, but it is accepted 
-	 * that they may be difficult to collect, so internal 
-	 * identifiers are a practical alternative. Producers SHOULD 
-	 * also include an identifier that refines this property where 
-	 * possible to refer to an entry in a specific qualification 
-	 * framework, e.g. QAN.
-	 */
-	
-	/** 
-	 * TODO educationLevel: Producers SHOULD where possible use a URI 
-	 * to refer to a level within a relevant framework, e.g. 
-	 * "http://purl.org/net/cm/terms/EQF#4" would refer to EQF 
-	 * level 4. Attention is drawn to [1]
-	 */
-	
-	/** 
-	 * TODO awardedBy and accreditedBy: A Producer SHOULD use the common 
-	 * name of the organisation for the content of these elements.
-	 */
-	
-	/** 
-	 * TODO absence of awardedBy or accreditedBy: Where a qualification 
-	 * does not contain an awardedBy and/or accreditedBy property, 
-	 * an Aggregator SHOULD interpret this as meaning the capability 
-	 * is provided by the Provider.
+	 * multiple credit schemes: Producers SHOULD use a separate credit element to represent the credits for each scheme.
 	 */
 
+	/**
+	 * scheme: While scheme is optional, the scheme SHOULD be stated unless a default has been agreed between the Producer and the Aggregator.
+	 */
 }
