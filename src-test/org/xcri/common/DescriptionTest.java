@@ -108,8 +108,14 @@ public class DescriptionTest {
 	}
 	
 	/**
-	 * Encoding schemes: Use of vocabularies for types of Descriptive Text Elements is encouraged.
+	 * TODO Encoding schemes: Use of vocabularies for types of Descriptive Text Elements is encouraged.
 	 */ 
+
+	
+	/** 
+	 * TODO Length: Aggregators MAY choose to truncate long Descriptive Text Element content; a 
+	 * suggested maximum length is 4000 characters.
+	 */
 	
 	/** 
 	 * Use of images: Images SHOULD NOT be referenced from within the Descriptive Text Element 
@@ -117,12 +123,6 @@ public class DescriptionTest {
 	 * an image tag can be used to execute cross-site scripting (XSS) attacks. Instead, any 
 	 * image SHOULD be provided separately using the XCRI image element.
 	 */
-	
-	/** 
-	 * Length: Aggregators MAY choose to truncate long Descriptive Text Element content; a 
-	 * suggested maximum length is 4000 characters.
-	 */
-	
 	/** 
 	 * Safe use of XHTML: See the section on Security Considerations for guidance.
 	 * Aggregators SHOULD pay particular attention to the security of the IMG, SCRIPT, 
