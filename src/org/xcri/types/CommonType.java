@@ -58,6 +58,16 @@ public abstract class CommonType extends XcriElement {
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 		
+		//
+		// Check for "date" and other non-recommended elements
+		//
+		if (element.getChild("date", Namespaces.DC_NAMESPACE_NS)!=null){
+			log.warn("date: Producers SHOULD NOT use the <date> element, but instead where possible use the <start> element and the temporal elements defined in this document: <end>, <applyFrom>, and <applyUntil");
+		}
+		if (element.getChild("hasPart", Namespaces.DC_NAMESPACE_NS) != null || element.getChild("isPartOf", Namespaces.DC_NAMESPACE_NS) != null){
+			log.warn("hasPart/isPartOf: these elements are included for compatibility with the [EN 15982] standard. Producers SHOULD NOT use these elements");
+		}
+		
 		// Process child elements
 		
 		ArrayList<Contributor> contributors = new ArrayList<Contributor>();
@@ -66,6 +76,11 @@ public abstract class CommonType extends XcriElement {
 			try {
 				contributor.fromXml((Element)obj);
 				contributors.add(contributor);
+				
+				if(contributor.getType() == null){
+					log.info("contributor : Producers SHOULD use refinements of this element, for example for \"presenter\" or \"lecturer\" or other contributor types relevant to  the type of course or presentation.");
+				}
+				
 			} catch (InvalidElementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -110,6 +125,19 @@ public abstract class CommonType extends XcriElement {
 				e.printStackTrace();
 			}
 		}
+		//
+		// Check occurrences per language
+		//
+		ArrayList<String> languages = new ArrayList<String>();
+		for(Title title: titles){
+			if (title.getLang() != null && languages.contains(title.getLang())){
+				System.out.println("multiple langs");
+				log.warn("title : there SHOULD NOT be more than one occurrence of title per language tag."); 
+			} else {
+				languages.add(title.getLang());
+				System.out.println(title.getLang());
+			}
+		}
 		this.setTitles(titles.toArray(new Title[titles.size()]));
 		
 		ArrayList<Subject> subjects = new ArrayList<Subject>();
@@ -131,10 +159,20 @@ public abstract class CommonType extends XcriElement {
 			try {
 				image.fromXml((Element)obj);
 				
+				//
+				// Check for alternate text
+				//
 				if (image.getAlt() == null||image.getAlt().length() == 0){
-					log.warn("image: image should have alternative text");
+					log.warn("image: While @alt is optional, following the structure of XHTML, a Producer SHOULD provide meaningful alternative text");
 				}
 				
+				//
+				// Check for known image type
+				//
+				String type = image.getSrc().substring(image.getSrc().lastIndexOf(".")+1, image.getSrc().length());
+				if (!type.equals("png") && !type.equals("jpg") && !type.equals("gif")){
+					log.warn("image : A Producer SHOULD offer images in standard formats, such as PNG and JPEG");
+				}
 				images.add(image);
 			} catch (InvalidElementException e) {
 				// TODO Auto-generated catch block

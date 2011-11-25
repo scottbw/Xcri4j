@@ -106,10 +106,6 @@ public class Course extends CommonDescriptiveType{
 		//
 		if (this.getSubjects() == null || this.getSubjects().length == 0){
 			log.warn("course: course does not contain a subject");
-		} else {
-			if (this.getParent()!= null && this.getSubjects() == ((Provider)this.getParent()).getSubjects()){
-				log.warn("course: course does not contain a subject; using inherited value from provider");				
-			}
 		}
 		
 		//
