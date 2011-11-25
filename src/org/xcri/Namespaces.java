@@ -29,7 +29,7 @@ public class Namespaces {
 	public static final String DC_NAMESPACE = "http://purl.org/dc/elements/1.1/";
 	public static final String DCTerms_NAMESPACE = "http://purl.org/dc/terms/";
 	public static final String XSI_NAMESPACE = "http://www.w3.org/2001/XMLSchema-instance";
-	
+	public static final String XHTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
 	
 	public static final Namespace XSI_NAMESPACE_NS = Namespace.getNamespace("xsi", XSI_NAMESPACE);
 	public static final Namespace DC_NAMESPACE_NS = Namespace.getNamespace("dc",DC_NAMESPACE);
@@ -37,4 +37,6 @@ public class Namespaces {
 	public static final Namespace MLO_NAMESPACE_NS = Namespace.getNamespace("mlo",MLO_NAMESPACE);
 	public static final Namespace XCRI_NAMESPACE_NS = Namespace.getNamespace("xcri",XCRI_NAMESPACE);
 	public static final Namespace DCTerms_NAMESPACE_NS = Namespace.getNamespace("dcterms", DCTerms_NAMESPACE);
+	public static final Namespace XHTML_NAMESPACE_NS = Namespace.getNamespace("xhtml",XHTML_NAMESPACE);
+
 }

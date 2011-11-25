@@ -19,12 +19,27 @@
  */
 package org.xcri.types;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
+import org.jdom.output.XMLOutputter;
+import org.xcri.Namespaces;
+import org.xcri.ParserConfiguration;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.util.ContentSecurityFilter;
 
 public class DescriptiveTextType extends XcriElement{
-	
+
+	private Log log = LogFactory.getLog(DescriptiveTextType.class);
+
 	private String href;
+	private boolean isXhtml = false;
+	private Element xhtml = null;
 
 	/**
 	 * @return the href
@@ -46,7 +61,60 @@ public class DescriptiveTextType extends XcriElement{
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
+
+
+		//
+		// Add XHTML content if present
+		//
+		if (element.getChild("div", Namespaces.XHTML_NAMESPACE_NS)!= null){
+			XMLOutputter out = new XMLOutputter();
+			StringWriter writer = new StringWriter();
+			xhtml = (Element) element.getChild("div", Namespaces.XHTML_NAMESPACE_NS).detach();
+			try {
+				//
+				// Check for potentially dangerous elements
+				//
+				Iterator i = xhtml.getDescendants(new ContentSecurityFilter());
+				ArrayList<Element> toRemove = new ArrayList<Element>();
+				while (i.hasNext()){
+					Element dangerousElement = (Element) i.next();
+					toRemove.add(dangerousElement);
+					log.warn("description : content contains potentially dangerous XHTML :"+dangerousElement.getName());
+				}
+				
+				//
+				// If configured to do so, remove elements
+				//
+				if (ParserConfiguration.getInstance().sanitizeXHTML()){
+					for (Element dangerousElement: toRemove){
+						log.warn("description : removing XHTML element :"+dangerousElement.getName());
+						dangerousElement.getParentElement().removeContent(dangerousElement);					
+					}
+				}
+				
+				out.output(xhtml, writer);
+				this.setValue(writer.getBuffer().toString());
+				isXhtml = true;
+
+
+			} catch (IOException e) {
+				throw new InvalidElementException("Error reading content of description element");
+			}
+		}
+
+		//
+		// Add HREF
+		//
 		this.setHref(element.getAttributeValue("href"));
+
+		//
+		// Cannot have both linked and inline content
+		//
+		if (this.getValue()!=null && this.getValue().length()>0){
+			if(this.getHref()!= null && this.getHref().length()>0){
+				throw new InvalidElementException("Description contains both text content and href attribute; only one or the other may be used");
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -56,9 +124,12 @@ public class DescriptiveTextType extends XcriElement{
 	public Element toXml() {
 		Element element = super.toXml();
 		if (this.getHref() != null) element.setAttribute("href", this.getHref());
+		if (isXhtml){
+			element.addContent(xhtml);
+		}
 		return element;
 	}
-	
-	
+
+
 
 }
