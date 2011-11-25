@@ -174,6 +174,23 @@ public class ProviderTest {
 	}
 	
 	/**
+	 * Location
+	 * @throws IOException 
+	 * @throws JDOMException 
+	 * @throws InvalidElementException 
+	 */
+	@Test
+	public void location() throws JDOMException, IOException, InvalidElementException{
+		Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><mlo:location><street>1 High Street</street><town>New Town</town></mlo:location></provider></catalog>"));
+		catalog.fromXml(document);
+
+		assertEquals("1 High Street", catalog.getProviders()[0].getLocation().getStreet());
+		assertEquals("New Town", catalog.getProviders()[0].getLocation().getPostalTown());
+	}
+	
+	/**
 	 * TODO multiple location elements
 	 */
 

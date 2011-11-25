@@ -102,10 +102,10 @@ public class Provider extends CommonType{
 		this.setCourses(courses.toArray(new Course[courses.size()]));
 		if (courses.size()==0) log.warn("provider: provider contains no courses");
 		
-		if(element.getChild("location") != null){
+		if(element.getChild("location", Namespaces.MLO_NAMESPACE_NS) != null){
 			Location location = new Location();
 			try {
-				location.fromXml(element.getChild("location"));
+				location.fromXml(element.getChild("location", Namespaces.MLO_NAMESPACE_NS));
 				this.setLocation(location);
 			} catch (InvalidElementException e) {
 				log.warn("provider : skipping invalid <location> element : "+e.getMessage());

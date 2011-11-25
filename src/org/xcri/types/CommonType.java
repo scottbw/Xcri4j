@@ -127,7 +127,6 @@ public abstract class CommonType extends XcriElement {
 		ArrayList<String> languages = new ArrayList<String>();
 		for(Title title: titles){
 			if (title.getLang() != null && languages.contains(title.getLang())){
-				System.out.println("multiple langs");
 				log.warn("title : there SHOULD NOT be more than one occurrence of title per language tag."); 
 			} else {
 				languages.add(title.getLang());

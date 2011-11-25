@@ -20,8 +20,10 @@
 
 package org.xcri.provider;
 
+import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.XcriElement;
 
 public class Location extends XcriElement{
@@ -34,8 +36,6 @@ public class Location extends XcriElement{
 	private String fax;
 	private String email;
 	private String url;
-	
-	
 	
 	
 	
@@ -140,7 +140,7 @@ public class Location extends XcriElement{
 	 */
 	@Override
 	public Namespace getNamespace() {
-		return Namespaces.XCRI_NAMESPACE_NS;
+		return Namespaces.MLO_NAMESPACE_NS;
 	}
 	/* (non-Javadoc)
 	 * @see org.xcri.types.XcriElement#getName()
@@ -148,6 +148,29 @@ public class Location extends XcriElement{
 	@Override
 	public String getName() {
 		return  "location";
+	}
+	/* (non-Javadoc)
+	 * @see org.xcri.types.XcriElement#toXml()
+	 */
+	@Override
+	public Element toXml() {
+		Element element = super.toXml();
+		//TODO
+		return element;
+	}
+	/* (non-Javadoc)
+	 * @see org.xcri.types.XcriElement#fromXml(org.jdom.Element)
+	 */
+	@Override
+	public void fromXml(Element element) throws InvalidElementException {
+		super.fromXml(element);
+		
+		if (element.getChild("street", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			this.setStreet(element.getChild("street", Namespaces.XCRI_NAMESPACE_NS).getText());
+		}
+		if (element.getChild("town", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			this.setPostalTown(element.getChild("town", Namespaces.XCRI_NAMESPACE_NS).getText());
+		}
 	}
 	
 	
