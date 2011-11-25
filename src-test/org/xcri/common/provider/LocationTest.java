@@ -22,15 +22,15 @@ package org.xcri.common.provider;
 public class LocationTest {
 	
 	/**
-	 * Refinements: Producers MAY refine the address element using 
+	 * TODO Refinements: Producers MAY refine the address element using 
 	 * other schemes to create specific address components. If using 
 	 * an alternative or additional encoding scheme, the scheme SHOULD 
 	 * be indicated using an xsi:type attribute.
 	 * 
-	 * Document order: Aggregators SHOULD interpret any untyped address 
+	 * TODO Document order: Aggregators SHOULD interpret any untyped address 
 	 * elements in document order by default.
 	 * 
-	 * PO Boxes Producers MAY use an address element for PO Box information.
+	 * TODO PO Boxes Producers MAY use an address element for PO Box information.
 	 */
 
 }

@@ -34,32 +34,32 @@ import org.xcri.exceptions.InvalidElementException;
 public class PresentationTest {
 	
 	/**
-	 * Absence of Venue: Where a venue is not specified, Aggregators SHOULD interpret this 
+	 * TODO Absence of Venue: Where a venue is not specified, Aggregators SHOULD interpret this 
 	 * as meaning that the provider address is the venue, and use its contact information 
 	 * for this purpose.
 	 */
 	
 	/**
-	 * Determining uniqueness: Where a presentation does not contain an identifier, Aggregators 
+	 * TODO Determining uniqueness: Where a presentation does not contain an identifier, Aggregators 
 	 * may need to construct presentation identifiers. It is recommended that presentations 
 	 * use a URL-formatted identifier where possible, following the scheme for the provider 
 	 * and course. E.g. "http://www.bolton.ac.uk/courses/1/2008-1"
 	 */
 	
 	/**
-	 * Absence of study mode and attendance: Aggregators SHOULD assume that the default value 
+	 * TODO Absence of study mode and attendance: Aggregators SHOULD assume that the default value 
 	 * for studyMode is "Full Time", the default for attendanceMode is "Campus", and the default 
 	 * for attendancePattern is "Daytime"
 	 */
 	
 	/**
-	 * Start dates : A Producer SHOULD include a start element even if there is no specific 
+	 * TODO Start dates : A Producer SHOULD include a start element even if there is no specific 
 	 * start date as this can still be used to describe the start details- see the section on 
 	 * Temporal Elements.
 	 */
 	
 	/**
-	 * Duration: A Producer SHOULD include a duration element or start and end dates, or both.
+	 * TODO Duration: A Producer SHOULD include a duration element or start and end dates, or both.
 	 */
 	
 	/**
@@ -152,12 +152,12 @@ public class PresentationTest {
 	/**
 	 * Engagement
 	 * 
-	 * Refinements Producers SHOULD use the refinements defined for this element with their predefined 
+	 * TODO Refinements Producers SHOULD use the refinements defined for this element with their predefined 
 	 * vocabularies in preference to this element.
 	 */
 	
 	/**
-	 * Study Mode
+	 * TODO Study Mode
 	 * 
 	 * Recommended Values: Producers SHOULD use the following values for this element, with the 
 	 * two-letter code used in the @identifier attribute, and the label in the element content:
@@ -172,7 +172,7 @@ public class PresentationTest {
 	 */
 	
 	/**
-	 * Attendance Mode
+	 * TODO Attendance Mode
 	 * 
 	 * Recommended Values: Producers SHOULD use the following values for this element, with the 
 	 * two-letter code used in the @identifier attribute, and the label in the element content:
@@ -188,7 +188,7 @@ public class PresentationTest {
 	 */
 	
 	/**
-	 * Attendance Pattern
+	 * TODO Attendance Pattern
 	 * 
 	 * Recommended Values: Producers SHOULD use the following values for this element, with 
 	 * the two-letter code used in the @identifier attribute, and the label in the element content:
@@ -202,21 +202,21 @@ public class PresentationTest {
 	 */
 	
 	/**
-	 * Places
+	 * TODO Places
 	 * 
 	 * The default, unqualified value of this property is a simple textual description. Producers 
 	 * MAY use specific encoding schemes that refine the use of this property.
 	 */
 	
 	/**
-	 * Cost
+	 * TODO Cost
 	 * 
 	 * The default, unqualified value of this property is a simple textual description. Producers 
 	 * MAY use specific encoding schemes that refine the use of this property.
 	 */
 
 	/**
-	 * Age
+	 * TODO Age
 	 * 
 	 * If the value of y is greater than or equal to 99, Aggregator MAY treat the value of this 
 	 * element as being equivalent to x+.
@@ -227,7 +227,7 @@ public class PresentationTest {
 	 */
 	
 	/**
-	 * Venue
+	 * TODO Venue
 	 * 
 	 * Provider: Producers SHOULD use the provider element to describe the organisation which acts 
 	 * as the provider of the venue. This MAY be a sub-organisation of the provider of the presentation 

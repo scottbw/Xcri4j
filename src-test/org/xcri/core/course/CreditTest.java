@@ -22,10 +22,10 @@ package org.xcri.core.course;
 public class CreditTest {
 	
 	/**
-	 * multiple credit schemes: Producers SHOULD use a separate credit element to represent the credits for each scheme.
+	 * TODO multiple credit schemes: Producers SHOULD use a separate credit element to represent the credits for each scheme.
 	 */
 
 	/**
-	 * scheme: While scheme is optional, the scheme SHOULD be stated unless a default has been agreed between the Producer and the Aggregator.
+	 * TODO scheme: While scheme is optional, the scheme SHOULD be stated unless a default has been agreed between the Producer and the Aggregator.
 	 */
 }

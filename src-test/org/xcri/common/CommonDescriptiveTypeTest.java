@@ -24,7 +24,7 @@ public class CommonDescriptiveTypeTest {
 	/**
 	 * Abstract
 	 * 
-	 * Length: A Aggregator MAY choose to truncate the value of this element 
+	 * TODO Length: A Aggregator MAY choose to truncate the value of this element 
 	 * if it exceeds 140 characters.
 	 */
 	
@@ -33,6 +33,8 @@ public class CommonDescriptiveTypeTest {
 	 * 
 	 * Learning Outcome: This SHOULD be used for specific, individual, measurable 
 	 * learning outcomes. For more general course aims, use the "objective" element.
+	 * 
+	 * NOT TESTABLE
 	 */
 	
 	/**
@@ -40,6 +42,8 @@ public class CommonDescriptiveTypeTest {
 	 * 
 	 * Objective: This SHOULD be used for the general aims of the course or 
 	 * presentation, and give a general overview of the purpose of the course.
+	 * 
+	 * NOT TESTABLE
 	 */
 	
 	/**
@@ -47,6 +51,8 @@ public class CommonDescriptiveTypeTest {
 	 * 
 	 * Use this for general entry requirements for the course or presentation, 
 	 * e.g. details of formal and informal requirements for entry to the course offering
+	 * 
+	 * NOT TESTABLE
 	 */
 	
 }

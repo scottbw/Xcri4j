@@ -66,5 +66,8 @@ public class ContributorTest {
 		Element element = catalog.getProviders()[0].getContributors()[0].toXml();
 		assertEquals("Bob", element.getText());
 		assertEquals(Namespaces.DC_NAMESPACE_NS, element.getNamespace());
+		
+		element = catalog.getProviders()[0].toXml();
+		assertEquals("Bob", element.getChild("contributor", Namespaces.DC_NAMESPACE_NS).getText());
 	}
 }
