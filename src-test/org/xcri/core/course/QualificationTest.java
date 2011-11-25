@@ -40,8 +40,10 @@ public class QualificationTest {
 	 */
 	
 	/** 
-	 * TODO awardedBy and accreditedBy: A Producer SHOULD use the common 
+	 * awardedBy and accreditedBy: A Producer SHOULD use the common 
 	 * name of the organisation for the content of these elements.
+	 * 
+	 * NOT TESTABLE
 	 */
 	
 	/** 
