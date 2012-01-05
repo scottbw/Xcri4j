@@ -26,6 +26,9 @@ import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.common.Title;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.presentation.ApplyFrom;
+import org.xcri.presentation.ApplyTo;
+import org.xcri.presentation.ApplyUntil;
 import org.xcri.presentation.Duration;
 import org.xcri.presentation.End;
 import org.xcri.presentation.Start;
@@ -39,6 +42,9 @@ public class Presentation extends CommonDescriptiveType {
 	private Start start;
 	private End end;
 	private Duration duration;
+	private ApplyFrom applyFrom;
+	private ApplyUntil applyUntil;
+	private ApplyTo applyTo;
 
 	/* (non-Javadoc)
 	 * @see org.xcri.types.CommonType#toXml()
@@ -99,6 +105,37 @@ public class Presentation extends CommonDescriptiveType {
 		 */
 		if (this.getDuration() == null && this.getStart() == null && this.getEnd() == null){
 			log.warn("presentation : A Producer SHOULD include a duration element or start and end dates, or both.");
+		}
+		
+		if (element.getChild("applyFrom", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			ApplyFrom applyFrom = new ApplyFrom();
+			try {
+				applyFrom.fromXml(element.getChild("applyFrom", Namespaces.XCRI_NAMESPACE_NS));
+				this.setApplyFrom(applyFrom);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid applyFrom element: "+e.getMessage());
+			}
+		}
+		
+		if (element.getChild("applyUntil", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			ApplyUntil applyUntil = new ApplyUntil();
+			try {
+				applyFrom.fromXml(element.getChild("applyUntil", Namespaces.XCRI_NAMESPACE_NS));
+				this.setApplyUntil(applyUntil);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid applyUntil element: "+e.getMessage());
+			}
+		}
+		
+		
+		if (element.getChild("applyTo", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			ApplyTo applyTo = new ApplyTo();
+			try {
+				applyFrom.fromXml(element.getChild("applyTo", Namespaces.XCRI_NAMESPACE_NS));
+				this.setApplyTo(applyTo);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid applyTo element: "+e.getMessage());
+			}
 		}
 		
 	}
@@ -172,6 +209,48 @@ public class Presentation extends CommonDescriptiveType {
 	 */
 	public void setDuration(Duration duration) {
 		this.duration = duration;
+	}
+
+	/**
+	 * @return the applyFrom
+	 */
+	public ApplyFrom getApplyFrom() {
+		return applyFrom;
+	}
+
+	/**
+	 * @param applyFrom the applyFrom to set
+	 */
+	public void setApplyFrom(ApplyFrom applyFrom) {
+		this.applyFrom = applyFrom;
+	}
+
+	/**
+	 * @return the applyUntil
+	 */
+	public ApplyUntil getApplyUntil() {
+		return applyUntil;
+	}
+
+	/**
+	 * @param applyUntil the applyUntil to set
+	 */
+	public void setApplyUntil(ApplyUntil applyUntil) {
+		this.applyUntil = applyUntil;
+	}
+
+	/**
+	 * @return the applyTo
+	 */
+	public ApplyTo getApplyTo() {
+		return applyTo;
+	}
+
+	/**
+	 * @param applyTo the applyTo to set
+	 */
+	public void setApplyTo(ApplyTo applyTo) {
+		this.applyTo = applyTo;
 	}
 	
 	
