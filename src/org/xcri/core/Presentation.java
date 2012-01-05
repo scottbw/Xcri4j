@@ -75,6 +75,7 @@ public class Presentation extends CommonDescriptiveType {
 		// TODO Engagement
 		if (this.getStudyMode() != null) element.addContent(this.getStudyMode().toXml());
 		if (this.getAttendanceMode() != null) element.addContent(this.getAttendanceMode().toXml());
+		if (this.getAttendancePattern() != null) element.addContent(this.getAttendancePattern().toXml());
 		return element;
 	}
 

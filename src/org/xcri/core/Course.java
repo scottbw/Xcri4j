@@ -65,6 +65,7 @@ public class Course extends CommonDescriptiveType{
 		Element element = super.toXml();
 		if (this.getPresentations()!= null) for (Presentation presentation:this.getPresentations()) element.addContent(presentation.toXml());
 		if (this.getQualifications()!= null) for (Qualification qualification:this.getQualifications()) element.addContent(qualification.toXml());
+		if (this.getCredits()!= null) for (Credit credit:this.getCredits()) element.addContent(credit.toXml());
 		return element;
 	}
 
