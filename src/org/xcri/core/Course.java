@@ -29,6 +29,7 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.common.Identifier;
+import org.xcri.course.Credit;
 import org.xcri.course.Qualification;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonDescriptiveType;
@@ -39,6 +40,8 @@ public class Course extends CommonDescriptiveType{
 
 	private Presentation[] presentations;
 	private Qualification[] qualifications;
+	private Credit[] credits;
+	// Note we ignore Level as it isn't used by XCRI
 
 	/**
 	 * @return the presentations
@@ -143,7 +146,17 @@ public class Course extends CommonDescriptiveType{
 		}
 		this.setQualifications(qualifications.toArray(new Qualification[qualifications.size()]));
 
-
+		ArrayList<Credit> credits = new ArrayList<Credit>();
+		for (Object obj : element.getChildren("credit", Namespaces.MLO_NAMESPACE_NS)){
+			Credit credit = new Credit();
+			try {
+				credit.fromXml((Element)obj);
+				credits.add(credit);
+			} catch (InvalidElementException e) {
+				log.warn("course : credit invalid, skipping");
+			}
+		}
+		this.setCredits(credits.toArray(new Credit[credits.size()]));
 
 
 	}
@@ -176,6 +189,20 @@ public class Course extends CommonDescriptiveType{
 	 */
 	public void setQualifications(Qualification[] qualifications) {
 		this.qualifications = qualifications;
+	}
+
+	/**
+	 * @return the credits
+	 */
+	public Credit[] getCredits() {
+		return credits;
+	}
+
+	/**
+	 * @param credits the credits to set
+	 */
+	public void setCredits(Credit[] credits) {
+		this.credits = credits;
 	}
 
 

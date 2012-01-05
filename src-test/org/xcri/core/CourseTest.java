@@ -37,6 +37,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.junit.Test;
 import org.xcri.Namespaces;
+import org.xcri.course.Credit;
 import org.xcri.exceptions.InvalidElementException;
 
 public class CourseTest {
@@ -296,9 +297,64 @@ public class CourseTest {
 	 * describing the credits available under each scheme, for 
 	 * example CATS or ECTS.
 	 */
-	//
-	// TODO
-	//
+	@Test
+	public void creditTest1() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Credit.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:cr=\""+Credit.CREDIT_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><mlo:credit><cr:scheme>TEST</cr:scheme><cr:level>1</cr:level><cr:value>20</cr:value><cr:value>30</cr:value></mlo:credit></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("credit : Multiple credit values found: Producers SHOULD use a separate credit element to represent the credits for each scheme"));
+            assertEquals("20", catalog.getProviders()[0].getCourses()[0].getCredits()[0].getCreditValue());
+            assertEquals("TEST", catalog.getProviders()[0].getCourses()[0].getCredits()[0].getScheme());
+            assertEquals("1", catalog.getProviders()[0].getCourses()[0].getCredits()[0].getLevel());
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	/**
+	 * scheme: While scheme is optional, the scheme SHOULD be stated unless a default has been agreed between the Producer and the Aggregator.
+	 */
+	@Test
+	public void creditTest2() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Credit.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:cr=\""+Credit.CREDIT_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><mlo:credit><cr:value>20</cr:value></mlo:credit></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("credit: While scheme is optional, the scheme SHOULD be stated unless a default has been agreed between the Producer and the Aggregator"));
+            assertEquals("20", catalog.getProviders()[0].getCourses()[0].getCredits()[0].getCreditValue());
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+
 	
 	/**
 	 * Absence of Image: Where a course does not contain an image, 
