@@ -29,9 +29,13 @@ import org.xcri.exceptions.InvalidElementException;
 import org.xcri.presentation.ApplyFrom;
 import org.xcri.presentation.ApplyTo;
 import org.xcri.presentation.ApplyUntil;
+import org.xcri.presentation.AttendanceMode;
+import org.xcri.presentation.AttendancePattern;
 import org.xcri.presentation.Duration;
 import org.xcri.presentation.End;
+import org.xcri.presentation.Engagement;
 import org.xcri.presentation.Start;
+import org.xcri.presentation.StudyMode;
 import org.xcri.types.CommonDescriptiveType;
 import org.xcri.types.CommonType;
 
@@ -45,6 +49,16 @@ public class Presentation extends CommonDescriptiveType {
 	private ApplyFrom applyFrom;
 	private ApplyUntil applyUntil;
 	private ApplyTo applyTo;
+	private Engagement[] engagements;
+	private StudyMode studyMode;
+	private AttendanceMode attendanceMode;
+	private AttendancePattern attendancePattern;
+	// TODO languageOfINstruction
+	// TODO languageOfAssessment
+	// TODO places
+	// TODO cost
+	// TODO age
+	// TODO venue
 
 	/* (non-Javadoc)
 	 * @see org.xcri.types.CommonType#toXml()
@@ -55,6 +69,12 @@ public class Presentation extends CommonDescriptiveType {
 		if (this.getStart() != null) element.addContent(this.getStart().toXml());
 		if (this.getEnd() != null) element.addContent(this.getEnd().toXml());
 		if (this.getDuration() != null) element.addContent(this.getDuration().toXml());
+		if (this.getApplyFrom() != null) element.addContent(this.getApplyFrom().toXml());
+		if (this.getApplyUntil() != null) element.addContent(this.getApplyUntil().toXml());
+		if (this.getApplyTo() != null) element.addContent(this.getApplyTo().toXml());
+		// TODO Engagement
+		if (this.getStudyMode() != null) element.addContent(this.getStudyMode().toXml());
+		if (this.getAttendanceMode() != null) element.addContent(this.getAttendanceMode().toXml());
 		return element;
 	}
 
@@ -135,6 +155,36 @@ public class Presentation extends CommonDescriptiveType {
 				this.setApplyTo(applyTo);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid applyTo element: "+e.getMessage());
+			}
+		}
+		
+		// TODO engagement
+		
+		if (element.getChild("studyMode", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			StudyMode studyMode = new StudyMode();
+			try {
+				studyMode.fromXml(element.getChild("studyMode", Namespaces.XCRI_NAMESPACE_NS));
+				this.setStudyMode(studyMode);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid studyMode element: "+e.getMessage());
+			}
+		}
+		if (element.getChild("attendanceMode", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			AttendanceMode attendanceMode = new AttendanceMode();
+			try {
+				attendanceMode.fromXml(element.getChild("attendanceMode", Namespaces.XCRI_NAMESPACE_NS));
+				this.setAttendanceMode(attendanceMode);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid attendanceMode element: "+e.getMessage());
+			}
+		}
+		if (element.getChild("attendancePattern", Namespaces.XCRI_NAMESPACE_NS)!=null){
+			AttendancePattern attendancePattern = new AttendancePattern();
+			try {
+				attendancePattern.fromXml(element.getChild("attendancePattern", Namespaces.XCRI_NAMESPACE_NS));
+				this.setAttendancePattern(attendancePattern);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid attendancePattern element: "+e.getMessage());
 			}
 		}
 		
@@ -251,6 +301,62 @@ public class Presentation extends CommonDescriptiveType {
 	 */
 	public void setApplyTo(ApplyTo applyTo) {
 		this.applyTo = applyTo;
+	}
+
+	/**
+	 * @return the engagements
+	 */
+	public Engagement[] getEngagements() {
+		return engagements;
+	}
+
+	/**
+	 * @param engagements the engagements to set
+	 */
+	public void setEngagements(Engagement[] engagements) {
+		this.engagements = engagements;
+	}
+
+	/**
+	 * @return the studyMode
+	 */
+	public StudyMode getStudyMode() {
+		return studyMode;
+	}
+
+	/**
+	 * @param studyMode the studyMode to set
+	 */
+	public void setStudyMode(StudyMode studyMode) {
+		this.studyMode = studyMode;
+	}
+
+	/**
+	 * @return the attendanceMode
+	 */
+	public AttendanceMode getAttendanceMode() {
+		return attendanceMode;
+	}
+
+	/**
+	 * @param attendanceMode the attendanceMode to set
+	 */
+	public void setAttendanceMode(AttendanceMode attendanceMode) {
+		this.attendanceMode = attendanceMode;
+	}
+
+	/**
+	 * @return the attendancePattern
+	 */
+	public AttendancePattern getAttendancePattern() {
+		return attendancePattern;
+	}
+
+	/**
+	 * @param attendancePattern the attendancePattern to set
+	 */
+	public void setAttendancePattern(AttendancePattern attendancePattern) {
+		this.attendancePattern = attendancePattern;
 	}
 	
 	

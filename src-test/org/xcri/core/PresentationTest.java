@@ -38,6 +38,9 @@ import org.jdom.input.SAXBuilder;
 import org.junit.Test;
 import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.presentation.AttendanceMode;
+import org.xcri.presentation.AttendancePattern;
+import org.xcri.presentation.StudyMode;
 
 public class PresentationTest {
 	
@@ -230,9 +233,44 @@ public class PresentationTest {
 	 * 
 	 * Note: These are mutually exclusive terms, so 'Full time' does not include 'Part of a full time programme'.
 	 */
+	@Test
+	public void studyModeTest1() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(StudyMode.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><studyMode identifier=\"TEST\"></studyMode></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: StudyMode : identifier (\"TEST\") is not a member of the recommended vocabulary"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	@Test
+	public void studyModeTest2() throws InvalidElementException, JDOMException, IOException{
+
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><studyMode identifier=\"FT\"></studyMode></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            assertEquals(StudyMode.StudyModeType.FT, catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getStudyMode().getStudyModeType());
+	}
 	
 	/**
-	 * TODO Attendance Mode
+	 * Attendance Mode
 	 * 
 	 * Recommended Values: Producers SHOULD use the following values for this element, with the 
 	 * two-letter code used in the @identifier attribute, and the label in the element content:
@@ -246,9 +284,44 @@ public class PresentationTest {
 	 * ON Online (no attendance)
 	 * WB Work-based
 	 */
+	@Test
+	public void attenanceModeTest1() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(AttendanceMode.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><attendanceMode identifier=\"TEST\"></attendanceMode></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: AttendanceMode : identifier (\"TEST\") is not a member of the recommended vocabulary"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	@Test
+	public void attendanceModeTest2() throws InvalidElementException, JDOMException, IOException{
+
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><attendanceMode identifier=\"MM\"></attendanceMode></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            assertEquals(AttendanceMode.AttendanceModeType.MM, catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getAttendanceMode().getAttendanceModeType());
+	}
 	
 	/**
-	 * TODO Attendance Pattern
+	 * Attendance Pattern
 	 * 
 	 * Recommended Values: Producers SHOULD use the following values for this element, with 
 	 * the two-letter code used in the @identifier attribute, and the label in the element content:
@@ -260,6 +333,41 @@ public class PresentationTest {
 	 * WE Weekend
 	 * CS Customised
 	 */
+	@Test
+	public void attenancePatternTest1() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(AttendancePattern.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><attendancePattern identifier=\"TEST\"></attendancePattern></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: AttendancePattern : identifier (\"TEST\") is not a member of the recommended vocabulary"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
+	@Test
+	public void attendancePattern2() throws InvalidElementException, JDOMException, IOException{
+
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><attendancePattern identifier=\"EV\"></attendancePattern></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            assertEquals(AttendancePattern.AttendancePatternType.EV, catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getAttendancePattern().getAttendancePatternType());
+	}
 	
 	/**
 	 * TODO Places
