@@ -52,8 +52,10 @@ public class TemporalType  extends XcriElement {
 	public Element toXml() {
 		Element element = super.toXml();
 		Calendar dtf = Calendar.getInstance();
-		dtf.setTime(this.getDtf());
-		if (this.getDtf() != null) element.setAttribute("dtf", DatatypeConverter.printDateTime(dtf));
+		if (this.getDtf() != null){
+			dtf.setTime(this.getDtf());
+			element.setAttribute("dtf", DatatypeConverter.printDateTime(dtf));
+		}
 		return element;
 	}
 
