@@ -20,9 +20,17 @@
 package org.xcri.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -53,14 +61,64 @@ public class PresentationTest {
 	 */
 	
 	/**
-	 * TODO Start dates : A Producer SHOULD include a start element even if there is no specific 
+	 * Start dates : A Producer SHOULD include a start element even if there is no specific 
 	 * start date as this can still be used to describe the start details- see the section on 
 	 * Temporal Elements.
 	 */
+	@Test
+	public void startTest() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Presentation.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: presentation : A Producer SHOULD include a start element"));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
 	
 	/**
-	 * TODO Duration: A Producer SHOULD include a duration element or start and end dates, or both.
+	 *  Duration: A Producer SHOULD include a duration element or start and end dates, or both.
 	 */
+	@Test
+	public void durationTest() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Presentation.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation></presentation></course></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("WARNING: presentation : A Producer SHOULD include a duration element or start and end dates, or both."));
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
 	
 	/**
 	 * Absence of Image: Where a presentation does not contain an image, but its containing 
@@ -147,6 +205,8 @@ public class PresentationTest {
 	 * the interval attribute can be used to provide a machine-readable equivalent. If there is no 
 	 * direct machine-equivalent value (e.g., the duration is flexible), then Producers SHOULD NOT 
 	 * include the interval attribute.
+	 * 
+	 * NOT TESTABLE
 	 */
 	
 	/**

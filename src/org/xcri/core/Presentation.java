@@ -26,6 +26,7 @@ import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.common.Title;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.presentation.Duration;
 import org.xcri.presentation.End;
 import org.xcri.presentation.Start;
 import org.xcri.types.CommonDescriptiveType;
@@ -37,6 +38,7 @@ public class Presentation extends CommonDescriptiveType {
 	
 	private Start start;
 	private End end;
+	private Duration duration;
 
 	/* (non-Javadoc)
 	 * @see org.xcri.types.CommonType#toXml()
@@ -46,6 +48,7 @@ public class Presentation extends CommonDescriptiveType {
 		Element element = super.toXml();
 		if (this.getStart() != null) element.addContent(this.getStart().toXml());
 		if (this.getEnd() != null) element.addContent(this.getEnd().toXml());
+		if (this.getDuration() != null) element.addContent(this.getDuration().toXml());
 		return element;
 	}
 
@@ -73,6 +76,31 @@ public class Presentation extends CommonDescriptiveType {
 				log.warn("presentation : skipping invalid end element: "+e.getMessage());
 			}
 		}
+		if (element.getChild("duration", Namespaces.MLO_NAMESPACE_NS)!=null){
+			Duration duration = new Duration();
+			try {
+				duration.fromXml(element.getChild("duration", Namespaces.MLO_NAMESPACE_NS));
+				this.setDuration(duration);
+			} catch (InvalidElementException e) {
+				log.warn("presentation : skipping invalid duration element: "+e.getMessage());
+			}
+		}
+		/**
+		 * Start dates : A Producer SHOULD include a start element even if there is no specific 
+		 * start date as this can still be used to describe the start details- see the section on 
+		 * Temporal Elements.
+		 */
+		if (this.getStart() == null){
+			log.warn("presentation : A Producer SHOULD include a start element");
+		}
+		
+		/**
+		 *  Duration: A Producer SHOULD include a duration element or start and end dates, or both.
+		 */
+		if (this.getDuration() == null && this.getStart() == null && this.getEnd() == null){
+			log.warn("presentation : A Producer SHOULD include a duration element or start and end dates, or both.");
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -130,6 +158,20 @@ public class Presentation extends CommonDescriptiveType {
 			}
 		} 
 		return titles;
+	}
+
+	/**
+	 * @return the duration
+	 */
+	public Duration getDuration() {
+		return duration;
+	}
+
+	/**
+	 * @param duration the duration to set
+	 */
+	public void setDuration(Duration duration) {
+		this.duration = duration;
 	}
 	
 	
