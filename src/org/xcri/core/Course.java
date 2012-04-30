@@ -33,6 +33,7 @@ import org.xcri.course.Credit;
 import org.xcri.course.Qualification;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonDescriptiveType;
+import org.xcri.util.lax.Lax;
 
 public class Course extends CommonDescriptiveType{
 
@@ -123,7 +124,7 @@ public class Course extends CommonDescriptiveType{
 		// Add children
 		//
 		ArrayList<Presentation> presentations = new ArrayList<Presentation>();
-		for (Object obj : element.getChildren("presentation", Namespaces.XCRI_NAMESPACE_NS)){
+		for (Object obj : Lax.getChildrenQuietly(element, "presentation", Namespaces.XCRI_NAMESPACE_NS, log)){
 			Presentation presentation = new Presentation();
 			try {
 				presentation.fromXml((Element)obj);
@@ -136,7 +137,7 @@ public class Course extends CommonDescriptiveType{
 		this.setPresentations(presentations.toArray(new Presentation[presentations.size()]));
 
 		ArrayList<Qualification> qualifications = new ArrayList<Qualification>();
-		for (Object obj : element.getChildren("qualification", Namespaces.MLO_NAMESPACE_NS)){
+		for (Object obj : Lax.getChildrenQuietly(element, "qualification", Namespaces.MLO_NAMESPACE_NS, log)){
 			Qualification qualification = new Qualification();
 			try {
 				qualification.fromXml((Element)obj);
@@ -148,7 +149,7 @@ public class Course extends CommonDescriptiveType{
 		this.setQualifications(qualifications.toArray(new Qualification[qualifications.size()]));
 
 		ArrayList<Credit> credits = new ArrayList<Credit>();
-		for (Object obj : element.getChildren("credit", Namespaces.MLO_NAMESPACE_NS)){
+		for (Object obj : Lax.getChildrenQuietly(element, "credit", Namespaces.MLO_NAMESPACE_NS, log)){
 			Credit credit = new Credit();
 			try {
 				credit.fromXml((Element)obj);

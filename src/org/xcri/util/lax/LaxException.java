@@ -34,6 +34,9 @@ public class LaxException extends Exception {
 	private static final long serialVersionUID = 79468947079793688L;
 	
 	private List<Element> elements;
+	
+	private boolean misspelled;
+	private boolean incorrectNamespace;
 
 	public LaxException(List<Element> elements) {
 		this.elements = elements;
@@ -42,6 +45,36 @@ public class LaxException extends Exception {
 	public List<Element> getElements(){
 		return elements;
 	}
+
+	/**
+	 * @return the misspelled
+	 */
+	public boolean isMisspelled() {
+		return misspelled;
+	}
+
+	/**
+	 * @param misspelled the misspelled to set
+	 */
+	public void setMisspelled(boolean misspelled) {
+		this.misspelled = misspelled;
+	}
+
+	/**
+	 * @return the incorrectNamespace
+	 */
+	public boolean isIncorrectNamespace() {
+		return incorrectNamespace;
+	}
+
+	/**
+	 * @param incorrectNamespace the incorrectNamespace to set
+	 */
+	public void setIncorrectNamespace(boolean incorrectNamespace) {
+		this.incorrectNamespace = incorrectNamespace;
+	}
+	
+	
 
 
 }

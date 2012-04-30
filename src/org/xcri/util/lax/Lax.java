@@ -19,6 +19,8 @@
  */
 package org.xcri.util.lax;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -40,9 +42,10 @@ public class Lax {
 		try {
 			elements = Lax.getChildren(parentElement, childElementName, preferredNamespace);
 			return elements;
-		} catch (WrongNamespaceException e) {
+		} catch (LaxException e) {
 			elements = e.getElements();
-			log.warn("catalog: provider elements use incorrect namespace");
+			if (e.isMisspelled()) log.warn("elements uses incorrect name:"+childElementName);
+			if (e.isIncorrectNamespace()) log.warn("elements use incorrect namespace:"+elements.get(0).getNamespaceURI());
 			return elements;
 		}
 	}
@@ -50,34 +53,21 @@ public class Lax {
 	public static Element getChildQuietly(Element parentElement, String childElementName, Namespace preferredNamespace, Log log){
 		try {
 			return Lax.getChild(parentElement, childElementName, preferredNamespace);
-		} catch (WrongNamespaceException e) {
-			return e.getElements().get(0);
 		} catch (SingleElementException e) {
+			log.warn("multiple '"+childElementName+"' child elements returned instead of a single element; ignoring all but the first child element found");
 			return e.getElements().get(0);
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static List<Element> getChildren(Element parentElement, String childElementName, Namespace preferredNamespace) throws WrongNamespaceException{
-		List<Element> children = parentElement.getChildren(childElementName,preferredNamespace);
-		
-		if (children == null || children.size() == 0) {
-			children = parentElement.getChildren(childElementName);
-			
-			if (children.size() > 0){
-				throw new WrongNamespaceException(children);
-			}
-			
-		}
-		return children;
+	public static List<Element> getChildren(Element parentElement, String childElementName, Namespace preferredNamespace) throws LaxException{
+		return getAllChildren(parentElement, childElementName, preferredNamespace);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Element getChild(Element parentElement, String childElementName, Namespace preferredNamespace) throws WrongNamespaceException, SingleElementException{
+	public static Element getChild(Element parentElement, String childElementName, Namespace preferredNamespace) throws SingleElementException{
 		List<Element> children;
 		try {
 			children = getChildren(parentElement, childElementName,preferredNamespace);
-		} catch (WrongNamespaceException e) {
+		} catch (LaxException e) {
 			children = e.getElements();
 		}
 		
@@ -89,4 +79,46 @@ public class Lax {
 		}
 		return null;
 	}
+	
+	/**
+	 * Get specified child elements as generously as possible
+	 * 
+	 * @param parentElement
+	 * @param childElementName
+	 * @param preferredNamespace
+	 * @return
+	 * @throws WrongNamespaceException
+	 * @throws ElementNameFormattingException
+	 */
+	@SuppressWarnings("unchecked")
+	private static List<Element> getAllChildren(Element parentElement, String childElementName, Namespace preferredNamespace) throws LaxException {
+		
+		boolean misspelled = false;
+		boolean wrongNamespace = false;
+		
+		LinkedList<Element> list = new LinkedList<Element>();
+		List<Element> allChildren = parentElement.getChildren();
+		Iterator<Element> iter = allChildren.iterator();
+		while(iter.hasNext()){
+			org.jdom.Element nextElement = (org.jdom.Element)iter.next();
+			if(nextElement.getName().equals(childElementName)){
+				list.add(nextElement);
+				if (!nextElement.getNamespace().equals(preferredNamespace)){
+					wrongNamespace = true;
+				}
+			} else if(nextElement.getName().compareToIgnoreCase(childElementName) == 0){
+				list.add(nextElement);
+				misspelled = true;
+			}
+		}
+		if(misspelled || wrongNamespace){
+			LaxException ex = new LaxException(list);
+			ex.setMisspelled(misspelled);
+			ex.setIncorrectNamespace(wrongNamespace);
+			throw ex;
+		}
+
+		return list;
+	}
+
 }

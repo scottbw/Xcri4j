@@ -38,6 +38,7 @@ import org.xcri.presentation.Start;
 import org.xcri.presentation.StudyMode;
 import org.xcri.types.CommonDescriptiveType;
 import org.xcri.types.CommonType;
+import org.xcri.util.lax.Lax;
 
 public class Presentation extends CommonDescriptiveType {
 	
@@ -85,28 +86,28 @@ public class Presentation extends CommonDescriptiveType {
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
-		if (element.getChild("start", Namespaces.MLO_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "start", Namespaces.MLO_NAMESPACE_NS, log) !=null){
 			Start start = new Start();
 			try {
-				start.fromXml(element.getChild("start", Namespaces.MLO_NAMESPACE_NS));
+				start.fromXml(Lax.getChildQuietly(element, "start", Namespaces.MLO_NAMESPACE_NS, log));
 				this.setStart(start);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid start element: "+e.getMessage());
 			}
 		}
-		if (element.getChild("end", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "end", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			End end = new End();
 			try {
-				end.fromXml(element.getChild("end", Namespaces.XCRI_NAMESPACE_NS));
+				end.fromXml(Lax.getChildQuietly(element, "end", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setEnd(end);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid end element: "+e.getMessage());
 			}
 		}
-		if (element.getChild("duration", Namespaces.MLO_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "duration", Namespaces.MLO_NAMESPACE_NS, log)!=null){
 			Duration duration = new Duration();
 			try {
-				duration.fromXml(element.getChild("duration", Namespaces.MLO_NAMESPACE_NS));
+				duration.fromXml(Lax.getChildQuietly(element, "duration", Namespaces.MLO_NAMESPACE_NS, log));
 				this.setDuration(duration);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid duration element: "+e.getMessage());
@@ -128,20 +129,20 @@ public class Presentation extends CommonDescriptiveType {
 			log.warn("presentation : A Producer SHOULD include a duration element or start and end dates, or both.");
 		}
 		
-		if (element.getChild("applyFrom", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "applyFrom", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			ApplyFrom applyFrom = new ApplyFrom();
 			try {
-				applyFrom.fromXml(element.getChild("applyFrom", Namespaces.XCRI_NAMESPACE_NS));
+				applyFrom.fromXml(Lax.getChildQuietly(element, "applyFrom", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setApplyFrom(applyFrom);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid applyFrom element: "+e.getMessage());
 			}
 		}
 		
-		if (element.getChild("applyUntil", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "applyUntil", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			ApplyUntil applyUntil = new ApplyUntil();
 			try {
-				applyFrom.fromXml(element.getChild("applyUntil", Namespaces.XCRI_NAMESPACE_NS));
+				applyFrom.fromXml(Lax.getChildQuietly(element, "applyUntil", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setApplyUntil(applyUntil);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid applyUntil element: "+e.getMessage());
@@ -149,10 +150,10 @@ public class Presentation extends CommonDescriptiveType {
 		}
 		
 		
-		if (element.getChild("applyTo", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "applyTo", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			ApplyTo applyTo = new ApplyTo();
 			try {
-				applyFrom.fromXml(element.getChild("applyTo", Namespaces.XCRI_NAMESPACE_NS));
+				applyFrom.fromXml(Lax.getChildQuietly(element, "applyTo", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setApplyTo(applyTo);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid applyTo element: "+e.getMessage());
@@ -161,28 +162,28 @@ public class Presentation extends CommonDescriptiveType {
 		
 		// TODO engagement
 		
-		if (element.getChild("studyMode", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "studyMode", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			StudyMode studyMode = new StudyMode();
 			try {
-				studyMode.fromXml(element.getChild("studyMode", Namespaces.XCRI_NAMESPACE_NS));
+				studyMode.fromXml(Lax.getChildQuietly(element, "studyMode", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setStudyMode(studyMode);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid studyMode element: "+e.getMessage());
 			}
 		}
-		if (element.getChild("attendanceMode", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "attendanceMode", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			AttendanceMode attendanceMode = new AttendanceMode();
 			try {
-				attendanceMode.fromXml(element.getChild("attendanceMode", Namespaces.XCRI_NAMESPACE_NS));
+				attendanceMode.fromXml(Lax.getChildQuietly(element, "attendanceMode", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setAttendanceMode(attendanceMode);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid attendanceMode element: "+e.getMessage());
 			}
 		}
-		if (element.getChild("attendancePattern", Namespaces.XCRI_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "attendancePattern", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			AttendancePattern attendancePattern = new AttendancePattern();
 			try {
-				attendancePattern.fromXml(element.getChild("attendancePattern", Namespaces.XCRI_NAMESPACE_NS));
+				attendancePattern.fromXml(Lax.getChildQuietly(element, "attendancePattern", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setAttendancePattern(attendancePattern);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid attendancePattern element: "+e.getMessage());

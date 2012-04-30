@@ -32,7 +32,6 @@ import org.xcri.provider.Location;
 import org.xcri.types.CommonType;
 import org.xcri.util.lax.Lax;
 import org.xcri.util.lax.SingleElementException;
-import org.xcri.util.lax.WrongNamespaceException;
 
 public class Provider extends CommonType{
 	
@@ -109,8 +108,6 @@ public class Provider extends CommonType{
 		Element locationElement;
 		try {
 			locationElement = Lax.getChild(element, "location", Namespaces.MLO_NAMESPACE_NS);
-		} catch (WrongNamespaceException e1) {
-			locationElement = e1.getElements().get(0);
 		} catch (SingleElementException e1) {
 			log.warn("provider : multiple <location> elements found; skipping all but first occurrence");
 			locationElement = e1.getElements().get(0);

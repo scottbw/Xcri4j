@@ -140,7 +140,7 @@ public class CatalogTest {
             String logMsg = out.toString();
 
             assertNotNull(logMsg);
-            assertTrue(logMsg.contains("catalog: provider elements use incorrect namespace"));
+            assertTrue(logMsg.contains("elements use incorrect namespace"));
             assertEquals(1,catalog.getProviders().length);
 
         } finally {
