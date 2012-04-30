@@ -54,6 +54,8 @@ public class Lax {
 		try {
 			return Lax.getChild(parentElement, childElementName, preferredNamespace);
 		} catch (SingleElementException e) {
+			if (e.isMisspelled()) log.warn("elements uses incorrect name:"+childElementName);
+			if (e.isIncorrectNamespace()) log.warn("elements use incorrect namespace:"+e.getElements().get(0).getNamespaceURI());
 			log.warn("multiple '"+childElementName+"' child elements returned instead of a single element; ignoring all but the first child element found");
 			return e.getElements().get(0);
 		}
@@ -102,11 +104,21 @@ public class Lax {
 		while(iter.hasNext()){
 			org.jdom.Element nextElement = (org.jdom.Element)iter.next();
 			if(nextElement.getName().equals(childElementName)){
+				//
+				// Add elements that use the wrong namespace, but correct it
+				// here so when its exported its correct
+				//
 				list.add(nextElement);
-				if (!nextElement.getNamespace().equals(preferredNamespace)){
+				if (nextElement.getNamespace() != preferredNamespace){
+					nextElement.setNamespace(preferredNamespace);
 					wrongNamespace = true;
 				}
 			} else if(nextElement.getName().compareToIgnoreCase(childElementName) == 0){
+				//
+				// Add elements that use incorrect case, but correct it here
+				// so when its exported its done correctly
+				//
+				nextElement.setName(childElementName);
 				list.add(nextElement);
 				misspelled = true;
 			}
