@@ -193,5 +193,72 @@ public class ProviderTest {
 	/**
 	 * TODO multiple location elements
 	 */
+	
+	/**
+	 * Location
+	 * @throws IOException 
+	 * @throws JDOMException 
+	 * @throws InvalidElementException 
+	 */
+	@Test
+	public void locations() throws JDOMException, IOException, InvalidElementException{
+
+		Logger logger = Logger.getLogger(Provider.class.getName());
+		Formatter formatter = new SimpleFormatter();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		Handler handler = new StreamHandler(out, formatter);
+		logger.addHandler(handler);
+
+		try {
+			Catalog catalog = new Catalog();
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><mlo:location><street>1 High Street</street><town>New Town</town></mlo:location><mlo:location></mlo:location></provider></catalog>"));
+			catalog.fromXml(document);
+
+			handler.flush();
+			String logMsg = out.toString();
+
+			assertNotNull(logMsg);
+			assertTrue(logMsg.contains("provider : multiple <location> elements found; skipping all but first occurrence"));
+
+			assertEquals("1 High Street", catalog.getProviders()[0].getLocation().getStreet());
+			assertEquals("New Town", catalog.getProviders()[0].getLocation().getPostalTown());
+		} finally {
+			logger.removeHandler(handler);
+		}
+	}
+	
+	
+	/**
+	 * Location
+	 * @throws IOException 
+	 * @throws JDOMException 
+	 * @throws InvalidElementException 
+	 */
+	@Test
+	public void locationsNoNs() throws JDOMException, IOException, InvalidElementException{
+
+		Logger logger = Logger.getLogger(Provider.class.getName());
+		Formatter formatter = new SimpleFormatter();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		Handler handler = new StreamHandler(out, formatter);
+		logger.addHandler(handler);
+
+		try {
+			Catalog catalog = new Catalog();
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(new StringReader("<catalog><provider><location><address>1 High Street</address></location><location><address>25 Test Street</address></location></provider></catalog>"));
+			catalog.fromXml(document);
+
+			handler.flush();
+			String logMsg = out.toString();
+
+			assertNotNull(logMsg);
+			assertTrue(logMsg.contains("provider : multiple <location> elements found; skipping all but first occurrence"));			
+			assertEquals("1 High Street", catalog.getProviders()[0].getLocation().getAddress()[0]);
+		} finally {
+			logger.removeHandler(handler);
+		}
+	}
 
 }

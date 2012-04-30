@@ -20,13 +20,21 @@
 
 package org.xcri.provider;
 
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.XcriElement;
+import org.xcri.util.lax.Lax;
 
 public class Location extends XcriElement{
+	
+	private Log log = LogFactory.getLog(Location.class);
+
 	
 	private String street;
 	private String postalTown;
@@ -164,6 +172,16 @@ public class Location extends XcriElement{
 	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
+		
+		List<Element> addressLines = Lax.getChildrenQuietly(element, "address", Namespaces.XCRI_NAMESPACE_NS, log);
+		if (addressLines != null && addressLines.size() > 0){
+		this.address = new String[addressLines.size()];
+		for (int i=0; i<addressLines.size();i++){
+			this.address[i] = addressLines.get(i).getText();
+		}
+		} else {
+			this.address = null;
+		}
 		
 		if (element.getChild("street", Namespaces.XCRI_NAMESPACE_NS)!=null){
 			this.setStreet(element.getChild("street", Namespaces.XCRI_NAMESPACE_NS).getText());

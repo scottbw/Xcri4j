@@ -40,6 +40,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Test;
+import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
 
 public class CatalogTest {
@@ -116,6 +117,36 @@ public class CatalogTest {
             logger.removeHandler(handler);
         }
     }
+    
+	/**
+	 * Test that even where providers use a bad namespace, we allow it and log it
+	 */
+	@Test
+	public void laxWithInvalidNamespace() throws InvalidElementException, JDOMException, IOException{
+        Logger logger = Logger.getLogger(Catalog.class.getName());
+
+        Formatter formatter = new SimpleFormatter();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Handler handler = new StreamHandler(out, formatter);
+        logger.addHandler(handler);
+
+        try {
+        	Catalog catalog = new Catalog();
+    		SAXBuilder builder = new SAXBuilder();
+    		Document document = builder.build(new StringReader("<catalog><provider><title>Test</title></provider></catalog>"));
+    		catalog.fromXml(document);
+
+            handler.flush();
+            String logMsg = out.toString();
+
+            assertNotNull(logMsg);
+            assertTrue(logMsg.contains("catalog: provider elements use incorrect namespace"));
+            assertEquals(1,catalog.getProviders().length);
+
+        } finally {
+            logger.removeHandler(handler);
+        }	
+	}
 
 
 }

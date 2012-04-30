@@ -30,6 +30,9 @@ import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.provider.Location;
 import org.xcri.types.CommonType;
+import org.xcri.util.lax.Lax;
+import org.xcri.util.lax.SingleElementException;
+import org.xcri.util.lax.WrongNamespaceException;
 
 public class Provider extends CommonType{
 	
@@ -89,10 +92,10 @@ public class Provider extends CommonType{
 		// Add children
 		//
 		ArrayList<Course> courses = new ArrayList<Course>();
-		for (Object obj : element.getChildren("course", Namespaces.XCRI_NAMESPACE_NS)){
+		for (Element obj : Lax.getChildrenQuietly(element, "course", Namespaces.XCRI_NAMESPACE_NS, log)){
 			Course course = new Course();
 			try {
-				course.fromXml((Element)obj);
+				course.fromXml(obj);
 				course.setParent(this);
 				courses.add(course);
 			} catch (InvalidElementException e) {
@@ -102,18 +105,25 @@ public class Provider extends CommonType{
 		this.setCourses(courses.toArray(new Course[courses.size()]));
 		if (courses.size()==0) log.warn("provider: provider contains no courses");
 		
-		if(element.getChild("location", Namespaces.MLO_NAMESPACE_NS) != null){
-			Location location = new Location();
+
+		Element locationElement;
+		try {
+			locationElement = Lax.getChild(element, "location", Namespaces.MLO_NAMESPACE_NS);
+		} catch (WrongNamespaceException e1) {
+			locationElement = e1.getElements().get(0);
+		} catch (SingleElementException e1) {
+			log.warn("provider : multiple <location> elements found; skipping all but first occurrence");
+			locationElement = e1.getElements().get(0);
+		}
+
+		if (locationElement != null){
 			try {
-				location.fromXml(element.getChild("location", Namespaces.MLO_NAMESPACE_NS));
+				Location location = new Location();
+				location.fromXml(locationElement);
 				this.setLocation(location);
 			} catch (InvalidElementException e) {
 				log.warn("provider : skipping invalid <location> element : "+e.getMessage());
 			}
-		}
-		
-		if(element.getChildren("location").size() > 1){
-			log.warn("provider : multiple <location> elements found; skipping all but first occurrence");
 		}
 	}
 

@@ -20,8 +20,6 @@
 
 package org.xcri.core;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -35,6 +33,7 @@ import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonType;
+import org.xcri.util.lax.Lax;
 
 public class Catalog extends CommonType{
 
@@ -94,9 +93,9 @@ public class Catalog extends CommonType{
 		// Add children
 		//
 		ArrayList<Provider> providers = new ArrayList<Provider>();
-		for (Object obj : element.getChildren("provider", Namespaces.XCRI_NAMESPACE_NS)){
+		for (Element providerElement : Lax.getChildrenQuietly(element, "provider", Namespaces.XCRI_NAMESPACE_NS, log)){
 			Provider provider = new Provider();
-			provider.fromXml((Element)obj);
+			provider.fromXml(providerElement);
 			provider.setParent(this);
 			providers.add(provider);
 		}
