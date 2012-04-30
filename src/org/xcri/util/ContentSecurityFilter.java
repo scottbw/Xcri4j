@@ -26,10 +26,11 @@ public class ContentSecurityFilter implements Filter {
 
 	private static final long serialVersionUID = 2626349759528661311L;
 	
-	
 	private static final String elements[] = {"IMG", "SCRIPT", "EMBED", "OBJECT", "FRAME", "FRAMESET", "IFRAME", "META", "LINK"};
 
-	@Override
+	/* (non-Javadoc)
+	 * @see org.jdom.filter.Filter#matches(java.lang.Object)
+	 */
 	public boolean matches(Object obj) {
 		if (obj instanceof Element){
 			String name = ((Element)obj).getName();

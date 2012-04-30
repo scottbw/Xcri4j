@@ -78,7 +78,6 @@ public abstract class XcriElement implements XcriObject {
 	}
 
 
-	@Override
 	public Element toXml() {
 		Element element = new Element(this.getName(), this.getNamespace());
 		if (this.getValue() != null) element.setText(getValue());
@@ -90,7 +89,6 @@ public abstract class XcriElement implements XcriObject {
 	/* (non-Javadoc)
 	 * @see org.xcri.XcriObject#fromXml(org.jdom.Element)
 	 */
-	@Override
 	public void fromXml(Element element) throws InvalidElementException {
 		this.setValue(element.getText());
 		this.setType(element.getAttributeValue("type", Namespaces.XSI_NAMESPACE_NS));
