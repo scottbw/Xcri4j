@@ -220,7 +220,7 @@ public class PresentationTest {
 	 */
 	
 	/**
-	 * TODO Study Mode
+	 * Study Mode
 	 * 
 	 * Recommended Values: Producers SHOULD use the following values for this element, with the 
 	 * two-letter code used in the @identifier attribute, and the label in the element content:
@@ -370,22 +370,68 @@ public class PresentationTest {
 	}
 	
 	/**
-	 * TODO Places
+	 * Places
 	 * 
 	 * The default, unqualified value of this property is a simple textual description. Producers 
 	 * MAY use specific encoding schemes that refine the use of this property.
+	 * @throws IOException 
+	 * @throws JDOMException 
+	 * @throws InvalidElementException 
 	 */
+	@Test
+	public void places() throws JDOMException, IOException, InvalidElementException{
+    	Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><places>200</places></presentation></course></provider></catalog>"));
+		catalog.fromXml(document);		
+		assertEquals("200", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getPlaces().getValue());
+	}
+	@Test
+	public void placesEncoded() throws JDOMException, IOException, InvalidElementException{
+    	Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><places xsi:type=\"decimal\">200</places></presentation></course></provider></catalog>"));
+		catalog.fromXml(document);		
+		assertEquals("200", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getPlaces().getValue());
+		assertEquals("decimal", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getPlaces().getType());
+	}
 	
 	/**
-	 * TODO Cost
+	 * Cost
 	 * 
 	 * The default, unqualified value of this property is a simple textual description. Producers 
 	 * MAY use specific encoding schemes that refine the use of this property.
+	 * @throws InvalidElementException 
+	 * @throws IOException 
+	 * @throws JDOMException 
 	 */
+	@Test
+	public void cost() throws InvalidElementException, JDOMException, IOException{
+    	Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><cost>£200</cost></presentation></course></provider></catalog>"));
+		catalog.fromXml(document);		
+		assertEquals("£200", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getCost().getValue());
+	}
+	@Test
+	public void costEncoded() throws InvalidElementException, JDOMException, IOException{
+    	Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><cost xsi:type=\"GBP\">200</cost></presentation></course></provider></catalog>"));
+		catalog.fromXml(document);		
+		assertEquals("200", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getCost().getValue());
+		assertEquals("GBP", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getCost().getType());
+	}
 
 	/**
-	 * TODO Age
+	 * Age
 	 * 
+	 * The value of this element MUST be one of:
+     * any
+     * not known
+     * x-y
+     * x+
+     * 
 	 * If the value of y is greater than or equal to 99, Aggregator MAY treat the value of this 
 	 * element as being equivalent to x+.
 	 * 
@@ -393,6 +439,14 @@ public class PresentationTest {
 	 * the right to a more realistic number, for example changing "124" to "12", or they MAY treat 
 	 * this element as in error and ignore this element.
 	 */
+	@Test
+	public void age() throws InvalidElementException, JDOMException, IOException{
+    	Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><age>18-30</age></presentation></course></provider></catalog>"));
+		catalog.fromXml(document);		
+		assertEquals("18-30", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getAge().getValue());
+	}
 	
 	/**
 	 * TODO Venue

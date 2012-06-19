@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011 University of Bolton
+ * Copyright (c) 2011-2012 University of Bolton
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
@@ -19,6 +19,8 @@
  */
 package org.xcri.core;
 
+import java.util.ArrayList;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdom.Element;
@@ -26,16 +28,22 @@ import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.common.Title;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.presentation.Age;
 import org.xcri.presentation.ApplyFrom;
 import org.xcri.presentation.ApplyTo;
 import org.xcri.presentation.ApplyUntil;
 import org.xcri.presentation.AttendanceMode;
 import org.xcri.presentation.AttendancePattern;
+import org.xcri.presentation.Cost;
 import org.xcri.presentation.Duration;
 import org.xcri.presentation.End;
 import org.xcri.presentation.Engagement;
+import org.xcri.presentation.LanguageOfAssessment;
+import org.xcri.presentation.LanguageOfInstruction;
+import org.xcri.presentation.Places;
 import org.xcri.presentation.Start;
 import org.xcri.presentation.StudyMode;
+import org.xcri.presentation.Venue;
 import org.xcri.types.CommonDescriptiveType;
 import org.xcri.types.CommonType;
 import org.xcri.util.lax.Lax;
@@ -54,12 +62,12 @@ public class Presentation extends CommonDescriptiveType {
 	private StudyMode studyMode;
 	private AttendanceMode attendanceMode;
 	private AttendancePattern attendancePattern;
-	// TODO languageOfINstruction
-	// TODO languageOfAssessment
-	// TODO places
-	// TODO cost
-	// TODO age
-	// TODO venue
+	private LanguageOfInstruction[] languageOfInstruction;
+	private LanguageOfAssessment[] languageOfAssessment;
+	private Places places;
+	private Cost cost;
+	private Age age;
+	private Venue[] venues;
 
 	/* (non-Javadoc)
 	 * @see org.xcri.types.CommonType#toXml()
@@ -77,6 +85,20 @@ public class Presentation extends CommonDescriptiveType {
 		if (this.getStudyMode() != null) element.addContent(this.getStudyMode().toXml());
 		if (this.getAttendanceMode() != null) element.addContent(this.getAttendanceMode().toXml());
 		if (this.getAttendancePattern() != null) element.addContent(this.getAttendancePattern().toXml());
+		if (this.getLanguageOfInstruction() != null){
+			for (LanguageOfInstruction lang: this.getLanguageOfInstruction()){
+				element.addContent(lang.toXml());
+			}
+		}
+		if (this.getLanguageOfAssessment() != null){
+			for (LanguageOfAssessment lang: this.getLanguageOfAssessment()){
+				element.addContent(lang.toXml());
+			}
+		}
+		if (this.getPlaces() != null) element.addContent(this.getPlaces().toXml());
+		if (this.getCost() != null) element.addContent(this.getCost().toXml());
+		if (this.getAge() != null) element.addContent(this.getAge().toXml());
+		
 		return element;
 	}
 
@@ -189,7 +211,53 @@ public class Presentation extends CommonDescriptiveType {
 				log.warn("presentation : skipping invalid attendancePattern element: "+e.getMessage());
 			}
 		}
+		if (Lax.getChildrenQuietly(element, "languageOfInstruction", Namespaces.MLO_NAMESPACE_NS, log)!=null){
+			ArrayList<LanguageOfInstruction> languages = new ArrayList<LanguageOfInstruction>();
+			for (Element langElement: Lax.getChildrenQuietly(element, "languageOfInstruction", Namespaces.MLO_NAMESPACE_NS, log)){
+				LanguageOfInstruction lang = new LanguageOfInstruction();
+				lang.fromXml(langElement);
+				languages.add(lang);
+			}
+			this.setLanguageOfInstruction(languages.toArray(new LanguageOfInstruction[languages.size()]));
+		}
+		if (Lax.getChildrenQuietly(element, "languageOfAssessment", Namespaces.MLO_NAMESPACE_NS, log)!=null){
+			ArrayList<LanguageOfAssessment> languages = new ArrayList<LanguageOfAssessment>();
+			for (Element langElement: Lax.getChildrenQuietly(element, "languageOfAssessment", Namespaces.XCRI_NAMESPACE_NS, log)){
+				LanguageOfAssessment lang = new LanguageOfAssessment();
+				lang.fromXml(langElement);
+				languages.add(lang);
+			}
+			this.setLanguageOfAssessment(languages.toArray(new LanguageOfAssessment[languages.size()]));
+		}
 		
+		if (Lax.getChildQuietly(element, "places", Namespaces.MLO_NAMESPACE_NS, log)!=null){
+			Places places = new Places();
+			try {
+				places.fromXml(Lax.getChildQuietly(element, "places", Namespaces.MLO_NAMESPACE_NS, log));
+				this.setPlaces(places);
+			} catch (Exception e) {
+				log.warn("presentation: skipping invalid places element: "+e.getMessage());
+			}
+		}
+		if (Lax.getChildQuietly(element, "cost", Namespaces.MLO_NAMESPACE_NS, log)!=null){
+			Cost cost = new Cost();
+			try {
+				cost.fromXml(Lax.getChildQuietly(element, "cost", Namespaces.MLO_NAMESPACE_NS, log));
+				this.setCost(cost);
+			} catch (Exception e) {
+				log.warn("presentation: skipping invalid cost element: "+e.getMessage());
+			}
+		}
+		
+		if (Lax.getChildQuietly(element, "age", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
+			Age age = new Age();
+			try {
+				age.fromXml(Lax.getChildQuietly(element, "age", Namespaces.XCRI_NAMESPACE_NS, log));
+				this.setAge(age);
+			} catch (Exception e) {
+				log.warn("presentation: skipping invalid age element: "+e.getMessage());
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -359,6 +427,90 @@ public class Presentation extends CommonDescriptiveType {
 	 */
 	public void setAttendancePattern(AttendancePattern attendancePattern) {
 		this.attendancePattern = attendancePattern;
+	}
+
+	/**
+	 * @return the languageOfInstruction
+	 */
+	public LanguageOfInstruction[] getLanguageOfInstruction() {
+		return languageOfInstruction;
+	}
+
+	/**
+	 * @param languageOfInstruction the languageOfInstruction to set
+	 */
+	public void setLanguageOfInstruction(LanguageOfInstruction[] languageOfInstruction) {
+		this.languageOfInstruction = languageOfInstruction;
+	}
+
+	/**
+	 * @return the languageOfAssessment
+	 */
+	public LanguageOfAssessment[] getLanguageOfAssessment() {
+		return languageOfAssessment;
+	}
+
+	/**
+	 * @param languageOfAssessment the languageOfAssessment to set
+	 */
+	public void setLanguageOfAssessment(LanguageOfAssessment[] languageOfAssessment) {
+		this.languageOfAssessment = languageOfAssessment;
+	}
+
+	/**
+	 * @return the places
+	 */
+	public Places getPlaces() {
+		return places;
+	}
+
+	/**
+	 * @param places the places to set
+	 */
+	public void setPlaces(Places places) {
+		this.places = places;
+	}
+
+	/**
+	 * @return the cost
+	 */
+	public Cost getCost() {
+		return cost;
+	}
+
+	/**
+	 * @param cost the cost to set
+	 */
+	public void setCost(Cost cost) {
+		this.cost = cost;
+	}
+
+	/**
+	 * @return the age
+	 */
+	public Age getAge() {
+		return age;
+	}
+
+	/**
+	 * @param age the age to set
+	 */
+	public void setAge(Age age) {
+		this.age = age;
+	}
+
+	/**
+	 * @return the venues
+	 */
+	public Venue[] getVenues() {
+		return venues;
+	}
+
+	/**
+	 * @param venues the venues to set
+	 */
+	public void setVenues(Venue[] venues) {
+		this.venues = venues;
 	}
 	
 	
