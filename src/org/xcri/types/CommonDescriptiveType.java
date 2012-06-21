@@ -75,13 +75,9 @@ public class CommonDescriptiveType extends CommonType {
 		//
 		ArrayList<Abstract> abstracts = new ArrayList<Abstract>();
 		for (Object obj: Lax.getChildrenQuietly(element, "abstract", Namespaces.XCRI_NAMESPACE_NS, log)){
-			System.out.println("abstract");
-
 			Abstract anabstract = new Abstract();
 			try {
 				anabstract.fromXml((Element)obj);
-				System.out.println("abstract="+anabstract.getValue().length());
-
 				abstracts.add(anabstract);				
 				// Producers MUST NOT create a value of this element that exceeds 140 characters.
 				if (anabstract.getValue().length() > 140){
@@ -119,11 +115,54 @@ public class CommonDescriptiveType extends CommonType {
 		}
 		this.setAssessments(assessments.toArray(new Assessment[assessments.size()]));
 		
-		// TODO learningoutcome
-		// TODO objective
-		// TODO prerequisite
-		// TODO regulations
-
+		ArrayList<LearningOutcome> learningOutcomes = new ArrayList<LearningOutcome>();
+		for (Object obj: Lax.getChildrenQuietly(element, "learningOutcome", Namespaces.XCRI_NAMESPACE_NS, log)){
+			LearningOutcome learningOutcome = new LearningOutcome();
+			try {
+				learningOutcome.fromXml((Element)obj);
+				learningOutcomes.add(learningOutcome);
+			} catch (InvalidElementException e) {
+				log.warn(this.getName()+" : skipping invalid learningOutcome element: "+e.getMessage());
+			}
+		}
+		this.setLearningOutcomes(learningOutcomes.toArray(new LearningOutcome[learningOutcomes.size()]));
+		
+		ArrayList<Objective> objectives = new ArrayList<Objective>();
+		for (Object obj: Lax.getChildrenQuietly(element, "objective", Namespaces.MLO_NAMESPACE_NS, log)){
+			Objective objective = new Objective();
+			try {
+				objective.fromXml((Element)obj);
+				objectives.add(objective);
+			} catch (InvalidElementException e) {
+				log.warn(this.getName()+" : skipping invalid objective element: "+e.getMessage());
+			}
+		}
+		this.setObjectives(objectives.toArray(new Objective[objectives.size()]));
+		
+		ArrayList<Prerequisite> prerequisites = new ArrayList<Prerequisite>();
+		for (Object obj: Lax.getChildrenQuietly(element, "prerequisite", Namespaces.MLO_NAMESPACE_NS, log)){
+			Prerequisite prerequisite = new Prerequisite();
+			try {
+				prerequisite.fromXml((Element)obj);
+				prerequisites.add(prerequisite);
+			} catch (InvalidElementException e) {
+				log.warn(this.getName()+" : skipping invalid prerequisite element: "+e.getMessage());
+			}
+		}
+		this.setPrerequisites(prerequisites.toArray(new Prerequisite[prerequisites.size()]));
+		
+		ArrayList<Regulations> regulations = new ArrayList<Regulations>();
+		for (Object obj: Lax.getChildrenQuietly(element, "regulations", Namespaces.XCRI_NAMESPACE_NS, log)){
+			Regulations regulation = new Regulations();
+			try {
+				regulation.fromXml((Element)obj);
+				regulations.add(regulation);
+			} catch (InvalidElementException e) {
+				log.warn(this.getName()+" : skipping invalid regulations element: "+e.getMessage());
+			}
+		}
+		this.setRegulations(regulations.toArray(new Regulations[regulations.size()]));
+		
 	}
 
 	/**
