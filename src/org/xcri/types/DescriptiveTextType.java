@@ -21,7 +21,6 @@ package org.xcri.types;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -164,8 +163,6 @@ public class DescriptiveTextType extends XcriElement{
 	}
 	
 	private void processXhtml(Element element) throws InvalidElementException{
-		XMLOutputter out = new XMLOutputter();
-		StringWriter writer = new StringWriter();
 		xhtml = element;
 		try {
 			//
@@ -190,11 +187,9 @@ public class DescriptiveTextType extends XcriElement{
 				}
 			}
 			
-			out.output(xhtml, writer);
-			this.setValue(writer.getBuffer().toString());
 			isXhtml = true;
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new InvalidElementException("Error reading content of description element");
 		}
 	}
@@ -214,7 +209,7 @@ public class DescriptiveTextType extends XcriElement{
 			//
 			// Add XHTML
 			//
-			element.addContent(xhtml);
+			element.addContent(xhtml.detach());
 		}
 		return element;
 	}
