@@ -36,6 +36,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.xcri.Namespaces;
 import org.xcri.ParserConfiguration;
 import org.xcri.exceptions.InvalidElementException;
@@ -195,13 +197,12 @@ public class DescriptiveTextType extends XcriElement{
 	}
 	
 	private void processXhtml(Element element) throws InvalidElementException{
-		xhtml = element;
 		try {
 			//
 			// Check for potentially dangerous elements
 			//
 			@SuppressWarnings("rawtypes")
-			Iterator i = xhtml.getDescendants(new ContentSecurityFilter());
+			Iterator i = element.getDescendants(new ContentSecurityFilter());
 			ArrayList<Element> toRemove = new ArrayList<Element>();
 			while (i.hasNext()){
 				Element dangerousElement = (Element) i.next();
@@ -219,7 +220,13 @@ public class DescriptiveTextType extends XcriElement{
 				}
 			}
 			
+			xhtml = element;
 			isXhtml = true;
+			
+			//
+			// Set value to text output of XML
+			//
+			this.setValue(new XMLOutputter().outputString(xhtml));
 
 		} catch (Exception e) {
 			throw new InvalidElementException("Error reading content of description element");
