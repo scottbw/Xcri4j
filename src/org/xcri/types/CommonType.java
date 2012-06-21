@@ -28,6 +28,7 @@ import org.jdom.Element;
 import org.xcri.Namespaces;
 import org.xcri.common.*;
 import org.xcri.exceptions.InvalidElementException;
+import org.xcri.util.lax.Lax;
 
 public abstract class CommonType extends XcriElement {
 	
@@ -61,17 +62,17 @@ public abstract class CommonType extends XcriElement {
 		//
 		// Check for "date" and other non-recommended elements
 		//
-		if (element.getChild("date", Namespaces.DC_NAMESPACE_NS)!=null){
+		if (Lax.getChildQuietly(element, "date", Namespaces.DC_NAMESPACE_NS, log)!=null){
 			log.warn("date: Producers SHOULD NOT use the <date> element, but instead where possible use the <start> element and the temporal elements defined in this document: <end>, <applyFrom>, and <applyUntil");
 		}
-		if (element.getChild("hasPart", Namespaces.DC_NAMESPACE_NS) != null || element.getChild("isPartOf", Namespaces.DC_NAMESPACE_NS) != null){
+		if (Lax.getChildrenQuietly(element, "hasPart", Namespaces.DC_NAMESPACE_NS, log) != null || Lax.getChildrenQuietly(element, "isPartOf", Namespaces.DC_NAMESPACE_NS, log) != null){
 			log.warn("hasPart/isPartOf: these elements are included for compatibility with the [EN 15982] standard. Producers SHOULD NOT use these elements");
 		}
 		
 		// Process child elements
 		
 		ArrayList<Contributor> contributors = new ArrayList<Contributor>();
-		for (Object obj: element.getChildren("contributor", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "contributor", Namespaces.DC_NAMESPACE_NS, log)){
 			Contributor contributor = new Contributor();
 			try {
 				contributor.fromXml((Element)obj);
@@ -88,7 +89,7 @@ public abstract class CommonType extends XcriElement {
 		this.setContributors(contributors.toArray(new Contributor[contributors.size()]));
 		
 		ArrayList<Description> descriptions = new ArrayList<Description>();
-		for (Object obj: element.getChildren("description", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "description", Namespaces.DC_NAMESPACE_NS, log)){
 			Description description = new Description();
 			try {
 				description.fromXml((Element)obj);
@@ -100,7 +101,7 @@ public abstract class CommonType extends XcriElement {
 		this.setDescriptions(descriptions.toArray(new Description[descriptions.size()]));
 		
 		ArrayList<Identifier> identifiers = new ArrayList<Identifier>();
-		for (Object obj: element.getChildren("identifier", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "identifier", Namespaces.DC_NAMESPACE_NS, log)){
 			Identifier identifier = new Identifier();
 			try {
 				identifier.fromXml((Element)obj);
@@ -112,7 +113,7 @@ public abstract class CommonType extends XcriElement {
 		this.setIdentifiers(identifiers.toArray(new Identifier[identifiers.size()]));
 		
 		ArrayList<Title> titles = new ArrayList<Title>();
-		for (Object obj: element.getChildren("title", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "title", Namespaces.DC_NAMESPACE_NS, log)){
 			Title title = new Title();
 			try {
 				title.fromXml((Element)obj);
@@ -135,7 +136,7 @@ public abstract class CommonType extends XcriElement {
 		this.setTitles(titles.toArray(new Title[titles.size()]));
 		
 		ArrayList<Subject> subjects = new ArrayList<Subject>();
-		for (Object obj: element.getChildren("subject", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "subject", Namespaces.DC_NAMESPACE_NS, log)){
 			Subject subject = new Subject();
 			try {
 				subject.fromXml((Element)obj);
@@ -147,7 +148,7 @@ public abstract class CommonType extends XcriElement {
 		this.setSubjects(subjects.toArray(new Subject[subjects.size()]));
 		
 		ArrayList<Image> images = new ArrayList<Image>();
-		for (Object obj: element.getChildren("image", Namespaces.XCRI_NAMESPACE_NS)){
+		for (Object obj:Lax.getChildrenQuietly(element, "image", Namespaces.XCRI_NAMESPACE_NS, log)){
 			Image image = new Image();
 			try {
 				image.fromXml((Element)obj);
@@ -174,7 +175,7 @@ public abstract class CommonType extends XcriElement {
 		this.setImages(images.toArray(new Image[images.size()]));
 		
 		ArrayList<Type> types = new ArrayList<Type>();
-		for (Object obj: element.getChildren("type", Namespaces.DC_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "type", Namespaces.DC_NAMESPACE_NS, log)){
 			Type type = new Type();
 			try {
 				type.fromXml((Element)obj);
@@ -186,7 +187,7 @@ public abstract class CommonType extends XcriElement {
 		this.setTypes(types.toArray(new Type[types.size()]));
 		
 		ArrayList<Url> urls = new ArrayList<Url>();
-		for (Object obj: element.getChildren("url", Namespaces.MLO_NAMESPACE_NS)){
+		for (Object obj: Lax.getChildrenQuietly(element, "url", Namespaces.MLO_NAMESPACE_NS, log)){
 			Url url = new Url();
 			try {
 				url.fromXml((Element)obj);
