@@ -19,14 +19,58 @@
  */
 package org.xcri.common;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
+
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.junit.Test;
+import org.xcri.Namespaces;
+import org.xcri.core.Catalog;
+import org.xcri.exceptions.InvalidElementException;
+import org.xcri.types.CommonDescriptiveType;
+import org.xcri.types.CommonType;
+
 public class CommonDescriptiveTypeTest {
 	
 	/**
 	 * Abstract
 	 * 
-	 * TODO Length: A Aggregator MAY choose to truncate the value of this element 
+	 * Length: A Aggregator MAY choose to truncate the value of this element 
 	 * if it exceeds 140 characters.
 	 */
+	@Test
+	public void abstractTest() throws InvalidElementException, JDOMException, IOException{
+		Logger logger = Logger.getLogger(CommonDescriptiveType.class.getName());
+
+		Formatter formatter = new SimpleFormatter();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		Handler handler = new StreamHandler(out, formatter);
+		logger.addHandler(handler);
+		try {
+			Catalog catalog = new Catalog();
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><abstract>123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890</abstract></course></provider></catalog>"));
+			catalog.fromXml(document);
+			handler.flush();
+			String logMsg = out.toString();
+			assertNotNull(logMsg);
+			System.out.println(logMsg);
+			assertTrue(logMsg.contains("Abstract: Producers MUST NOT create a value of this element that exceeds 140 characters."));
+		} finally {
+			logger.removeHandler(handler);
+		}	
+	}
 	
 	/** 
 	 * Learning Outcome
