@@ -27,12 +27,18 @@ import java.io.IOException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Test;
 import org.xcri.common.Description;
 import org.xcri.core.Catalog;
 import org.xcri.exceptions.InvalidElementException;
 
+/**
+ * Some smoke tests
+ * @author scottw
+ *
+ */
 public class GeneralTest {
 	
 	@Test
@@ -54,8 +60,11 @@ public class GeneralTest {
 		String output = new XMLOutputter().outputString(description.toXml());
 		assertEquals("<dc:description xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><xhtml:div xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"><xhtml:p>This is a course, its great!</xhtml:p></xhtml:div></dc:description>", output);
 
-		
-		new XMLOutputter().output(catalog.toXml(), System.out);
+		description = catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getDescriptions()[0];
+		output = new XMLOutputter().outputString(description.toXml());
+		assertEquals("<dc:description xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><xhtml:div xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"><xhtml:p>This is a course, its great!</xhtml:p></xhtml:div></dc:description>", output);
+
+		new XMLOutputter(Format.getPrettyFormat()).output(catalog.toXml(), System.out);
 	}
 	
 
