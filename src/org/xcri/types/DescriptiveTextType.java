@@ -36,11 +36,11 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
 import org.xcri.Namespaces;
 import org.xcri.ParserConfiguration;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.util.ContentSecurityFilter;
+import org.xcri.util.lax.Lax;
 
 public class DescriptiveTextType extends XcriElement{
 
@@ -49,6 +49,36 @@ public class DescriptiveTextType extends XcriElement{
 	private String href;
 	private boolean isXhtml = false;
 	private Element xhtml = null;
+	
+	
+
+	/**
+	 * @return the xhtml
+	 */
+	public Element getXhtml() {
+		return xhtml;
+	}
+
+	/**
+	 * @param xhtml the xhtml to set
+	 */
+	public void setXhtml(Element xhtml) {
+		this.xhtml = xhtml;
+	}
+
+	/**
+	 * @return the isXhtml
+	 */
+	public boolean isXhtml() {
+		return isXhtml;
+	}
+
+	/**
+	 * @param isXhtml the isXhtml to set
+	 */
+	public void setIsXhtml(boolean isXhtml) {
+		this.isXhtml = isXhtml;
+	}
 
 	/**
 	 * @return the href
@@ -74,8 +104,10 @@ public class DescriptiveTextType extends XcriElement{
 		//
 		// Add XHTML content if present
 		//
-		if (element.getChild("div", Namespaces.XHTML_NAMESPACE_NS)!= null){
-			processXhtml((Element) element.getChild("div", Namespaces.XHTML_NAMESPACE_NS).detach());
+		Element div = Lax.getChildQuietly(element, "div", Namespaces.XHTML_NAMESPACE_NS, log);
+		if (div != null){
+			div = (Element) div.detach();
+			processXhtml(div);
 		}
 		
 		//
