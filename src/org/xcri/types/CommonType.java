@@ -228,7 +228,13 @@ public abstract class CommonType extends XcriElement {
 	public Description[] getDescriptions() {
 		if (descriptions == null || descriptions.length == 0){
 			if (this.getParent() instanceof CommonType){
-				return ((CommonType)this.getParent()).getDescriptions();
+				Description[] parentDescriptions = ((CommonType)this.getParent()).getDescriptions();
+				this.descriptions = new Description[parentDescriptions.length];
+				for (int i=0;i<parentDescriptions.length;i++){
+					this.descriptions[i] = parentDescriptions[i].clone();
+				}
+				//this.setDescriptions(((CommonType)this.getParent()).getDescriptions().clone());
+				//return ((CommonType)this.getParent()).getDescriptions();
 			}
 		} 
 		return descriptions;
