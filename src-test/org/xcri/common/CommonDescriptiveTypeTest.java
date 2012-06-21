@@ -39,7 +39,6 @@ import org.xcri.Namespaces;
 import org.xcri.core.Catalog;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.CommonDescriptiveType;
-import org.xcri.types.CommonType;
 
 public class CommonDescriptiveTypeTest {
 	
