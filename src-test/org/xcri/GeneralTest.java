@@ -48,9 +48,14 @@ public class GeneralTest {
 		assertEquals("This is a really bad example provider", catalog.getProviders()[0].getDescriptions()[0].getValue());
 		assertEquals("A provider", catalog.getProviders()[0].getTitles()[0].getValue());
 		
+		assertEquals("A Course", catalog.getProviders()[0].getCourses()[0].getTitles()[0].getValue());
+		
 		Description description = catalog.getProviders()[0].getCourses()[0].getDescriptions()[0];
 		String output = new XMLOutputter().outputString(description.toXml());
 		assertEquals("<dc:description xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><xhtml:div xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"><xhtml:p>This is a course, its great!</xhtml:p></xhtml:div></dc:description>", output);
+
+		
+		new XMLOutputter().output(catalog.toXml(), System.out);
 	}
 	
 
