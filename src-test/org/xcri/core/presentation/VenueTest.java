@@ -19,6 +19,7 @@
 */
 package org.xcri.core.presentation;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -35,10 +36,13 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.junit.Test;
 import org.xcri.core.Catalog;
+import org.xcri.core.Provider;
 import org.xcri.exceptions.InvalidElementException;
 import org.xcri.presentation.Venue;
+import org.xcri.provider.Location;
 
 public class VenueTest {
 	
@@ -75,6 +79,18 @@ public class VenueTest {
 		Element provider = new Element("provider");
 		element.addContent(provider);
 		venue.fromXml(element);
+	}
+	
+	@Test
+	public void validContentWithLocation() throws InvalidElementException{
+		Venue venue = new Venue();
+		Provider provider = new Provider();
+		Location location = new Location();
+		provider.setLocation(location);
+		venue.setProvider(provider);
+		Element element = venue.toXml();
+		String out = new XMLOutputter().outputString(element);
+		assertEquals("<xcri:venue xmlns:xcri=\"http://xcri.org/profiles/1.2/catalog\"><xcri:provider><mlo:location xmlns:mlo=\"http://purl.org/net/mlo\" /></xcri:provider></xcri:venue>", out);		
 	}
 	
 	@Test
