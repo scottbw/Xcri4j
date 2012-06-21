@@ -65,7 +65,7 @@ public abstract class CommonType extends XcriElement {
 		if (Lax.getChildQuietly(element, "date", Namespaces.DC_NAMESPACE_NS, log)!=null){
 			log.warn("date: Producers SHOULD NOT use the <date> element, but instead where possible use the <start> element and the temporal elements defined in this document: <end>, <applyFrom>, and <applyUntil");
 		}
-		if (Lax.getChildrenQuietly(element, "hasPart", Namespaces.DC_NAMESPACE_NS, log) != null || Lax.getChildrenQuietly(element, "isPartOf", Namespaces.DC_NAMESPACE_NS, log) != null){
+		if (Lax.getChildrenQuietly(element, "hasPart", Namespaces.DC_NAMESPACE_NS, log).size()>0 || Lax.getChildrenQuietly(element, "isPartOf", Namespaces.DC_NAMESPACE_NS, log).size()>0){
 			log.warn("hasPart/isPartOf: these elements are included for compatibility with the [EN 15982] standard. Producers SHOULD NOT use these elements");
 		}
 		
