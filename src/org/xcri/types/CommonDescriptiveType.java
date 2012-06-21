@@ -51,12 +51,44 @@ public class CommonDescriptiveType extends CommonType {
 		//
 		// Descriptions...
 		//
+		
+		if (this.getAbstracts() != null) for (Abstract a: this.getAbstracts()) element.addContent(a.toXml());
+		if (this.getApplicationProcedures() != null) for (ApplicationProcedure a: this.getApplicationProcedures()) element.addContent(a.toXml());
+		if (this.getAssessments() != null) for (Assessment a: this.getAssessments()) element.addContent(a.toXml());
+		if (this.getLearningOutcomes() != null) for (LearningOutcome a: this.getLearningOutcomes()) element.addContent(a.toXml());
+		if (this.getObjectives() != null) for (Objective a: this.getObjectives()) element.addContent(a.toXml());
+		if (this.getPrerequisites() != null) for (Prerequisite a: this.getPrerequisites()) element.addContent(a.toXml());
+		if (this.getRegulations() != null) for (Regulations a: this.getRegulations()) element.addContent(a.toXml());
+		
+		return element;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.xcri.types.CommonType#fromXml(org.jdom.Element)
+	 */
+	@Override
+	public void fromXml(Element element) throws InvalidElementException {
+		super.fromXml(element);
+		
+		//
+		// Descriptions...
+		//
+		System.out.println("checking for abstracts");		
 		ArrayList<Abstract> abstracts = new ArrayList<Abstract>();
 		for (Object obj: Lax.getChildrenQuietly(element, "abstract", Namespaces.XCRI_NAMESPACE_NS, log)){
+			System.out.println("abstract");
+
 			Abstract anabstract = new Abstract();
 			try {
 				anabstract.fromXml((Element)obj);
-				abstracts.add(anabstract);
+				System.out.println("abstract="+anabstract.getValue().length());
+
+				abstracts.add(anabstract);				
+				// Producers MUST NOT create a value of this element that exceeds 140 characters.
+				if (anabstract.getValue().length() > 140){
+					log.warn(this.getName()+ ": Abstract: Producers MUST NOT create a value of this element that exceeds 140 characters.");
+				}
+				
 			} catch (InvalidElementException e) {
 				log.warn(this.getName()+" : skipping invalid abstract element: "+e.getMessage());
 			}
@@ -92,28 +124,6 @@ public class CommonDescriptiveType extends CommonType {
 		// TODO objective
 		// TODO prerequisite
 		// TODO regulations
-		
-		return element;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.xcri.types.CommonType#fromXml(org.jdom.Element)
-	 */
-	@Override
-	public void fromXml(Element element) throws InvalidElementException {
-		super.fromXml(element);
-		
-		//
-		// Descriptions...
-		//
-		
-		if (this.getAbstracts() != null) for (Abstract a: this.getAbstracts()) element.addContent(a.toXml());
-		if (this.getApplicationProcedures() != null) for (ApplicationProcedure a: this.getApplicationProcedures()) element.addContent(a.toXml());
-		if (this.getAssessments() != null) for (Assessment a: this.getAssessments()) element.addContent(a.toXml());
-		if (this.getLearningOutcomes() != null) for (LearningOutcome a: this.getLearningOutcomes()) element.addContent(a.toXml());
-		if (this.getObjectives() != null) for (Objective a: this.getObjectives()) element.addContent(a.toXml());
-		if (this.getPrerequisites() != null) for (Prerequisite a: this.getPrerequisites()) element.addContent(a.toXml());
-		if (this.getRegulations() != null) for (Regulations a: this.getRegulations()) element.addContent(a.toXml());
 
 	}
 
