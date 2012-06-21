@@ -99,6 +99,12 @@ public class Presentation extends CommonDescriptiveType {
 		if (this.getCost() != null) element.addContent(this.getCost().toXml());
 		if (this.getAge() != null) element.addContent(this.getAge().toXml());
 		
+		if (this.getVenues() != null){
+			for (Venue venue: this.getVenues()){
+				element.addContent(venue.toXml());
+			}
+		}
+		
 		return element;
 	}
 
@@ -257,6 +263,16 @@ public class Presentation extends CommonDescriptiveType {
 			} catch (Exception e) {
 				log.warn("presentation: skipping invalid age element: "+e.getMessage());
 			}
+		}
+		
+		if (Lax.getChildrenQuietly(element, "venue", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
+			ArrayList<Venue> venues = new ArrayList<Venue>();
+			for (Element venueElement: Lax.getChildrenQuietly(element, "venue", Namespaces.XCRI_NAMESPACE_NS, log)){
+				Venue venue = new Venue();
+				venue.fromXml(venueElement);
+				venues.add(venue);
+			}
+			this.setVenues(venues.toArray( new Venue[venues.size()]));
 		}
 	}
 
