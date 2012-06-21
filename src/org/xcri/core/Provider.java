@@ -50,8 +50,10 @@ public class Provider extends CommonType{
 		//
 		// Add courses
 		//
-		for (Course course: courses){
-			element.addContent(course.toXml());
+		if (this.getCourses()!=null){
+			for (Course course: courses){
+				element.addContent(course.toXml());
+			}
 		}
 		
 		//
