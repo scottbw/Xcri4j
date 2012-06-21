@@ -59,7 +59,7 @@ public class Venue extends XcriElement{
 	@Override
 	public Element toXml() {
 		Element element = super.toXml();
-		
+		if (this.getProvider() != null) element.addContent(this.getProvider().toXml());
 		return element;
 	}
 
