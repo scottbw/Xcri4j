@@ -51,7 +51,8 @@ public class Description extends DescriptiveTextType{
 		description.setHref(this.getHref());
 		description.setLang(this.getLang());
 		description.setType(this.getType());
-		description.setXhtml((Element)this.getXhtml().clone());
+		if (this.getXhtml() != null)
+			description.setXhtml((Element)this.getXhtml().clone());
 		description.setValue(this.getValue());
 		description.setIsXhtml(this.isXhtml());
 		return description;
