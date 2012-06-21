@@ -73,7 +73,6 @@ public class CommonDescriptiveType extends CommonType {
 		//
 		// Descriptions...
 		//
-		System.out.println("checking for abstracts");		
 		ArrayList<Abstract> abstracts = new ArrayList<Abstract>();
 		for (Object obj: Lax.getChildrenQuietly(element, "abstract", Namespaces.XCRI_NAMESPACE_NS, log)){
 			System.out.println("abstract");
