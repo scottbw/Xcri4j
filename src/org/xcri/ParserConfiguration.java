@@ -24,6 +24,7 @@ public class ParserConfiguration {
 	private static ParserConfiguration instance;
 	
 	private boolean sanitizeXHTML = true;
+	private boolean fixCDATA = true;
 	
 	private ParserConfiguration(){
 		
@@ -46,6 +47,20 @@ public class ParserConfiguration {
 	 */
 	public void setSanitizeXHTML(boolean sanitizeXHTML) {
 		this.sanitizeXHTML = sanitizeXHTML;
+	}
+
+	/**
+	 * @return the fixCDATA
+	 */
+	public boolean fixCDATA() {
+		return fixCDATA;
+	}
+
+	/**
+	 * @param fixCDATA the fixCDATA to set
+	 */
+	public void setFixCDATA(boolean fixCDATA) {
+		this.fixCDATA = fixCDATA;
 	}
 
 }
