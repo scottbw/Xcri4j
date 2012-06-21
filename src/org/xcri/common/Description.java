@@ -20,6 +20,7 @@
 
 package org.xcri.common;
 
+import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
 import org.xcri.types.DescriptiveTextType;
@@ -41,5 +42,21 @@ public class Description extends DescriptiveTextType{
 	public String getName() {
 		return "description";
 	}
+
+	/**
+	 * Create a clone of the description, including a deep clone of the Xhtml Node
+	 */
+	public Description clone(){
+		Description description = new Description();
+		description.setHref(this.getHref());
+		description.setLang(this.getLang());
+		description.setType(this.getType());
+		description.setXhtml((Element)this.getXhtml().clone());
+		description.setValue(this.getValue());
+		description.setIsXhtml(this.isXhtml());
+		return description;
+	}
+	
+	
 
 }
