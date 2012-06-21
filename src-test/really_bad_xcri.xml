@@ -1,0 +1,17 @@
+<catalog>
+  <provider>
+    <description>This is a really bad example provider</description>
+    <TITLE>A provider</TITLE>
+    <course>
+      <title>A Course</title>
+      <description>
+      	<![CDATA[
+      			<p>This is a course, its great!</p>
+      	]]>
+      </description>
+      <subject>Computing</subject>
+      <presentation>
+      </presentation>
+    </course>
+  </provider>
+</catalog>
