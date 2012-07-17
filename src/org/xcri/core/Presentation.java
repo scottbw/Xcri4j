@@ -170,7 +170,7 @@ public class Presentation extends CommonDescriptiveType {
 		if (Lax.getChildQuietly(element, "applyUntil", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			ApplyUntil applyUntil = new ApplyUntil();
 			try {
-				applyFrom.fromXml(Lax.getChildQuietly(element, "applyUntil", Namespaces.XCRI_NAMESPACE_NS, log));
+				applyUntil.fromXml(Lax.getChildQuietly(element, "applyUntil", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setApplyUntil(applyUntil);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid applyUntil element: "+e.getMessage());
@@ -181,7 +181,7 @@ public class Presentation extends CommonDescriptiveType {
 		if (Lax.getChildQuietly(element, "applyTo", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			ApplyTo applyTo = new ApplyTo();
 			try {
-				applyFrom.fromXml(Lax.getChildQuietly(element, "applyTo", Namespaces.XCRI_NAMESPACE_NS, log));
+				applyTo.fromXml(Lax.getChildQuietly(element, "applyTo", Namespaces.XCRI_NAMESPACE_NS, log));
 				this.setApplyTo(applyTo);
 			} catch (InvalidElementException e) {
 				log.warn("presentation : skipping invalid applyTo element: "+e.getMessage());
@@ -274,6 +274,7 @@ public class Presentation extends CommonDescriptiveType {
 			}
 			this.setVenues(venues.toArray( new Venue[venues.size()]));
 		}
+		
 	}
 
 	/* (non-Javadoc)
