@@ -70,7 +70,7 @@ public class Venue extends XcriElement{
 	public void fromXml(Element element) throws InvalidElementException {
 		super.fromXml(element);
 	
-		if (this.getValue()!=""){
+		if (!this.getValue().trim().isEmpty()){
 			throw new InvalidElementException("venue: If a <venue> element contains any text content, Aggregators MUST treat the <venue> element as being in error.");
 		}
 		
