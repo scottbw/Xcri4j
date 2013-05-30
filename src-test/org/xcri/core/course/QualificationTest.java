@@ -47,10 +47,12 @@ public class QualificationTest {
 	 */
 	
 	/** 
-	 * TODO absence of awardedBy or accreditedBy: Where a qualification 
+	 * absence of awardedBy or accreditedBy: Where a qualification 
 	 * does not contain an awardedBy and/or accreditedBy property, 
 	 * an Aggregator SHOULD interpret this as meaning the capability 
 	 * is provided by the Provider.
+	 * 
+	 * NOT TESTABLE
 	 */
 
 }
