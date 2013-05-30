@@ -35,4 +35,14 @@ public class LanguageTest {
 		lang.fromXml(element);
 		
 	}
+	
+	@Test(expected=InvalidElementException.class)
+	public void nullLanguage() throws InvalidElementException{
+		
+		LanguageOfInstruction lang = new LanguageOfInstruction();
+		Element element = new Element("languageOfInstruction");
+		element.setText(null);
+		lang.fromXml(element);
+		
+	}
 }
