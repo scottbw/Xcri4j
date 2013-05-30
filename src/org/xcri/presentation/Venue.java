@@ -92,7 +92,10 @@ public class Venue extends XcriElement{
 			throw new InvalidElementException("venue: If a <venue> element does not contain one and only one <provider> element, Aggregators MUST treat the <venue> element as being in error.");
 		}
 		
-		// TODO If a <venue> element contains any child elements other than <provider>, Aggregators MUST treat the <venue> element as being in error.
+		if (element.getChildren().size() != 1){
+			throw new InvalidElementException("venue: If a <venue> element contains any child elements other than <provider>, Aggregators MUST treat the <venue> element as being in error.");
+		}
+		
 		
 		// NOT TESTABLE: Provider: Producers SHOULD use the provider element to describe the organisation which acts as the provider of the venue. This MAY be a sub-organisation of the provider of the presentation (such as a department or school), or it MAY be a third party or external organisation.
 		// NOT TESTABLE: Provider Properties: When a provider element is used in a venue element, Producers SHOULD include only basic information about an organisation, such as identifier, title, description, url, image and location.
