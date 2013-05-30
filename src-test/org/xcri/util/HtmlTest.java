@@ -83,7 +83,7 @@ public class HtmlTest {
 		
 		String output = new XMLOutputter().outputString(description.toXml());
 		
-		assertEquals("<dc:description xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><div xmlns=\"http://www.w3.org/1999/xhtml\"><p>This is a computing course, its great!</p></div></dc:description>", output);
+		assertEquals("<dc:description xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><xhtml:div xmlns:xhtml=\"http://www.w3.org/1999/xhtml\"><p xmlns=\"http://www.w3.org/1999/xhtml\">This is a computing course, its great!</p></xhtml:div></dc:description>", output);
 	}
 
 }

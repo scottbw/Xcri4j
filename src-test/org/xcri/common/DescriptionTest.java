@@ -20,7 +20,9 @@
 package org.xcri.common;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -33,6 +35,7 @@ import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.junit.Test;
@@ -71,8 +74,7 @@ public class DescriptionTest {
 		String content = 
 		"<div xmlns=\"http://www.w3.org/1999/xhtml\">" +
 		"<p>This module shows how to take an existing presentation and modify it and how to create " +
-		"your own presentations. No knowledge of PowerPoint is assumed.</p>" +
-		"<p>The topics covered are:" +
+		"your own presentations. No knowledge of PowerPoint is assumed. The topics covered are:</p>" +
 		"<ul>" +
 		"<li>Using and modifying an existing PowerPoint presentation</li> " +
 		"<li>Creating a simple presentation</li> " +
@@ -80,7 +82,6 @@ public class DescriptionTest {
 		"<li>The PowerPoint views</li> " +
 		"<li>Printing and saving your presentation</li>" +
 		"</ul>" +
-		"</p> " +
 		"</div>";
 		
 		Catalog catalog = new Catalog();
@@ -88,7 +89,26 @@ public class DescriptionTest {
 		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\"><provider><dc:description>"+content+"</dc:description></provider></catalog>"));
 		catalog.fromXml(document);
 		
-		assertEquals(content, catalog.getProviders()[0].getDescriptions()[0].getValue());
+		Element xhtml = catalog.getProviders()[0].getDescriptions()[0].getXhtml();
+		
+		//
+		// Check the namespace
+		//
+		assertEquals(xhtml.getNamespaceURI(), "http://www.w3.org/1999/xhtml");
+		
+		//
+		// Check all children are in correct NS
+		//
+		assertNotNull(xhtml.getChild("p", Namespaces.XHTML_NAMESPACE_NS));
+		assertNotNull(xhtml.getChild("ul", Namespaces.XHTML_NAMESPACE_NS).getChild("li", Namespaces.XHTML_NAMESPACE_NS));
+		
+		//
+		// We can't assert the actual value of the content output as it depends on the underlying XML implementation, as well
+		// as how JDOM outputs the model. Instead we have to check, as above, that the semantics are processed correctly. 
+		//
+		//assertEquals(content, catalog.getProviders()[0].getDescriptions()[0].getValue());
+		
+		
 		assertNotNull(catalog.getProviders()[0].getDescriptions()[0].toXml().getChild("div", Namespaces.XHTML_NAMESPACE_NS));
 	}
 	
@@ -179,7 +199,13 @@ public class DescriptionTest {
 		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\"><dc:description><div xmlns=\"http://www.w3.org/1999/xhtml\">"+content+"</div></dc:description></catalog>"));
 		catalog.fromXml(document);
 		
-		assertEquals("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Hello World</p><p>Goodbye</p></div>", catalog.getDescriptions()[0].getValue());
+		//
+		// We can't assert the actual value of the content output as it depends on the underlying XML implementation, as well
+		// as how JDOM outputs the model. Instead we have to check that the semantics are processed correctly. 
+		//
+		//assertEquals("<div xmlns=\"http://www.w3.org/1999/xhtml\"><p>Hello World</p><p>Goodbye</p></div>", catalog.getDescriptions()[0].getValue());
+		
+		assertFalse(catalog.getDescriptions()[0].getValue().contains("script"));
 	}
 	
 	/** 
