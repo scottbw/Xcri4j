@@ -81,7 +81,11 @@ public class Presentation extends CommonDescriptiveType {
 		if (this.getApplyFrom() != null) element.addContent(this.getApplyFrom().toXml());
 		if (this.getApplyUntil() != null) element.addContent(this.getApplyUntil().toXml());
 		if (this.getApplyTo() != null) element.addContent(this.getApplyTo().toXml());
-		// TODO Engagement
+		if (this.getEngagements() != null){
+			for (Engagement engagement: this.getEngagements()){
+				element.addContent(engagement.toXml());
+			}
+		}
 		if (this.getStudyMode() != null) element.addContent(this.getStudyMode().toXml());
 		if (this.getAttendanceMode() != null) element.addContent(this.getAttendanceMode().toXml());
 		if (this.getAttendancePattern() != null) element.addContent(this.getAttendancePattern().toXml());
@@ -188,7 +192,15 @@ public class Presentation extends CommonDescriptiveType {
 			}
 		}
 		
-		// TODO engagement
+		if (Lax.getChildrenQuietly(element, "engagement", Namespaces.MLO_NAMESPACE_NS, log)!=null){
+			ArrayList<Engagement> engagements = new ArrayList<Engagement>();
+			for (Element engagementElement: Lax.getChildrenQuietly(element, "engagement", Namespaces.MLO_NAMESPACE_NS, log)){
+				Engagement engagement = new Engagement();
+				engagement.fromXml(engagementElement);
+				engagements.add(engagement);
+			}
+			this.setEngagements(engagements.toArray(new Engagement[engagements.size()]));
+		}
 		
 		if (Lax.getChildQuietly(element, "studyMode", Namespaces.XCRI_NAMESPACE_NS, log)!=null){
 			StudyMode studyMode = new StudyMode();
