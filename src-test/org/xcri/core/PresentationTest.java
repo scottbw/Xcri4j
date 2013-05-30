@@ -448,8 +448,18 @@ public class PresentationTest {
 		assertEquals("18-30", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getAge().getValue());
 	}
 	
+	@Test
+	public void languages() throws InvalidElementException, JDOMException, IOException{
+    	Catalog catalog = new Catalog();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(new StringReader("<catalog xmlns=\""+Namespaces.XCRI_NAMESPACE+"\" xmlns:mlo=\""+Namespaces.MLO_NAMESPACE+"\" xmlns:dc=\""+Namespaces.DC_NAMESPACE+"\" xmlns:xsi=\""+Namespaces.XSI_NAMESPACE+"\"><provider><course><presentation><languageOfInstruction>en</languageOfInstruction><languageOfAssessment>en</languageOfAssessment></presentation></course></provider></catalog>"));
+		catalog.fromXml(document);		
+		assertEquals("en", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getLanguageOfInstruction()[0].getValue());
+		assertEquals("en", catalog.getProviders()[0].getCourses()[0].getPresentations()[0].getLanguageOfAssessment()[0].getValue());
+	}
+	
 	/**
-	 * TODO Venue
+	 * Venue
 	 * 
 	 * Provider: Producers SHOULD use the provider element to describe the organisation which acts 
 	 * as the provider of the venue. This MAY be a sub-organisation of the provider of the presentation 
@@ -461,4 +471,5 @@ public class PresentationTest {
 	 * 
 	 * Location: When a provider element is used in a venue element, Producers SHOULD include a location element.
 	 */
+	// This is implemented in VenueTest
 }
