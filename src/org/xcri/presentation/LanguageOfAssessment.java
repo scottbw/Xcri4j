@@ -19,9 +19,12 @@
  */
 package org.xcri.presentation;
 
+import org.jdom.Element;
 import org.jdom.Namespace;
 import org.xcri.Namespaces;
+import org.xcri.exceptions.InvalidElementException;
 import org.xcri.types.XcriElement;
+import org.xcri.util.LanguageUtils;
 
 public class LanguageOfAssessment extends XcriElement{
 
@@ -41,6 +44,14 @@ public class LanguageOfAssessment extends XcriElement{
 		return "languageOfAssessment";
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.xcri.types.XcriElement#fromXml(org.jdom.Element)
+	 */
+	@Override
+	public void fromXml(Element element) throws InvalidElementException {
+		super.fromXml(element);
+		if (!LanguageUtils.isValidLanguageTag(this.getValue())) throw new InvalidElementException(this.getValue() + "is not a valid BCP-47 language string");
+	}
 	
 
 }
